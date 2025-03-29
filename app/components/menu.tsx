@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { role } from '../lib/data';
+import { role } from '@/app/lib/data';
 
 const menuItems = [
   {
