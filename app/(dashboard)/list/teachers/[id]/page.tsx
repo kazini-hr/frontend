@@ -1,5 +1,6 @@
 import Announcements from '@/app/components/announcements';
 import MyCalendar from '@/app/components/big-calendar';
+import FormModal from '@/app/components/form-modal';
 import Performance from '@/app/components/performance';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -24,7 +25,28 @@ const SingleTeacherPage = () => {
               />
             </div>
             <div className="w-2/3 flex flex-col justify-between gap-4">
-              <h1 className="text-xl font-semibold">Argyle Nderitu</h1>
+              <div className="flex items-center gap-4">
+                <h1 className="text-xl font-semibold">Argyle Nderitu</h1>
+                <FormModal
+                  table="teacher"
+                  type="update"
+                  data={{
+                    id: 1,
+                    username: 'ArgyleN',
+                    email: 'someemail@kipepeo.com',
+                    password: 'password',
+                    phone: '0100522105',
+                    address: 'Kilimani, Nairobi',
+                    bloodType: 'AB+',
+                    firstName: 'Argyle',
+                    lastName: 'Nderitu',
+                    birthday: '2000-01-01',
+                    sex: 'male',
+                    image:
+                      'https://images.pexels.com/photos/1438081/pexels-photo-1438081.jpeg?auto=compress&cs=tinysrgb&w=1200',
+                  }}
+                />
+              </div>
               <p className="text-sm text-gray-500">
                 Lorem ipsue ndoaios fdisfhu fbidaiuh afhuidhi ifdhiuew diauish
               </p>
