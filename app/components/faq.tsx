@@ -1,10 +1,10 @@
-"use client";
-import React, { useState } from "react";
-import TestimonialSingle from "./testimonial-single";
+'use client';
+import React, { useState } from 'react';
+import TestimonialSingle from './testimonial-single';
 
 const faqData = [
   {
-    question: "What is QuillMinds?",
+    question: 'What is QuillMinds?',
     answer: (
       <div className="space-y-2 leading-relaxed">
         <p>
@@ -16,49 +16,49 @@ const faqData = [
     ),
   },
   {
-    question: "How does the free plan work?",
+    question: 'How does the free plan work?',
     answer:
       "Our free plan offers 50 credits for AI-powered content generation. This allows you to explore QuillMinds' capabilities and create several lesson plans or educational resources without any cost.",
   },
   {
-    question: "What features are included in the subscription plan?",
+    question: 'What features are included in the subscription plan?',
     answer:
-      "The subscription plan offers unlimited AI-powered content generation, advanced customization options, priority support, and access to premium educational resources and templates.",
+      'The subscription plan offers unlimited AI-powered content generation, advanced customization options, priority support, and access to premium educational resources and templates.',
   },
   {
-    question: "Can I try QuillMinds before subscribing?",
+    question: 'Can I try QuillMinds before subscribing?',
     answer:
       "Absolutely! You can start with our free plan, which includes 50 credits for content generation. This allows you to experience the platform's capabilities before deciding to subscribe.",
   },
   {
-    question: "How does AI assist in lesson planning?",
+    question: 'How does AI assist in lesson planning?',
     answer:
-      "Our AI analyzes educational standards, best teaching practices, and your input to generate comprehensive lesson plans, activities, and assessments tailored to your specific needs and teaching style.",
+      'Our AI analyzes educational standards, best teaching practices, and your input to generate comprehensive lesson plans, activities, and assessments tailored to your specific needs and teaching style.',
   },
   {
-    question: "Is my data secure?",
+    question: 'Is my data secure?',
     answer:
-      "Yes, we take data security very seriously. All user data is encrypted, and we adhere to strict privacy policies to ensure your information and created content remain confidential.",
+      'Yes, we take data security very seriously. All user data is encrypted, and we adhere to strict privacy policies to ensure your information and created content remain confidential.',
   },
   {
-    question: "Can I customize the AI-generated content?",
+    question: 'Can I customize the AI-generated content?',
     answer:
-      "Absolutely! While our AI provides a strong foundation, you have full control to edit, customize, and refine any generated content to perfectly match your teaching needs and style.",
+      'Absolutely! While our AI provides a strong foundation, you have full control to edit, customize, and refine any generated content to perfectly match your teaching needs and style.',
   },
   {
-    question: "What subjects and grade levels does QuillMinds support?",
+    question: 'What subjects and grade levels does QuillMinds support?',
     answer:
-      "QuillMinds supports a wide range of subjects and grade levels, from elementary to high school. Our AI is continuously updated to align with current educational standards across various disciplines.",
+      'QuillMinds supports a wide range of subjects and grade levels, from elementary to high school. Our AI is continuously updated to align with current educational standards across various disciplines.',
   },
   {
-    question: "How often is new content added?",
+    question: 'How often is new content added?',
     answer:
-      "We regularly update our content library and AI models to ensure you have access to the latest educational resources and teaching methodologies. Subscribers receive notifications about new features and content.",
+      'We regularly update our content library and AI models to ensure you have access to the latest educational resources and teaching methodologies. Subscribers receive notifications about new features and content.',
   },
   {
-    question: "Can I collaborate with other teachers on QuillMinds?",
+    question: 'Can I collaborate with other teachers on QuillMinds?',
     answer:
-      "Yes, our platform includes collaboration features that allow you to share and co-edit lesson plans with colleagues, fostering a community of educators and enabling the exchange of ideas.",
+      'Yes, our platform includes collaboration features that allow you to share and co-edit lesson plans with colleagues, fostering a community of educators and enabling the exchange of ideas.',
   },
 ];
 
@@ -83,7 +83,7 @@ const FAQItem = ({
         <span className="flex-1 text-slate-800">{question}</span>
         <svg
           className={`ml-auto h-4 w-4 flex-shrink-0 fill-current transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
+            isOpen ? 'rotate-180' : ''
           }`}
           viewBox="0 0 16 16"
           xmlns="http://www.w3.org/2000/svg"
@@ -93,11 +93,11 @@ const FAQItem = ({
       </button>
       <div
         className={`overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
         }`}
       >
         <div className="pb-5 leading-relaxed text-slate-600">
-          {typeof answer === "string" ? <p>{answer}</p> : answer}
+          {typeof answer === 'string' ? <p>{answer}</p> : answer}
         </div>
       </div>
     </li>
@@ -135,11 +135,11 @@ export default function FAQ({ config }: { config?: any }) {
         </div>
         <TestimonialSingle
           testimonial={{
-            name: "Emily Thompson",
+            name: 'Emily Thompson',
             content:
-              "QuillMinds has transformed my teaching experience. The AI-powered lesson plans are not only time-saving but also incredibly creative and engaging for my students.",
-            schoolName: "Westfield High School",
-            image: "https://api.dicebear.com/6.x/avataaars/svg?seed=Emily",
+              'QuillMinds has transformed my teaching experience. The AI-powered lesson plans are not only time-saving but also incredibly creative and engaging for my students.',
+            businessName: 'Westfield High School',
+            image: 'https://api.dicebear.com/6.x/avataaars/svg?seed=Emily',
           }}
         />
       </div>
