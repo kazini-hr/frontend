@@ -1,8 +1,8 @@
 const config = {
-  domainName: "quillminds.com",
-  appName: "QuillMinds",
+  domainName: 'kazinihr.co.ke',
+  appName: 'Kazini',
   appDescription:
-    "QuillMinds is ai-powered lesson preparation tool for teachers.",
+    'Kazini All-in-one Human Resource Management solution for you & your team.',
 };
 
 export default config;

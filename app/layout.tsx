@@ -23,7 +23,7 @@ export const metadata = getSEOTags({
     type: 'website',
     title: 'Kazini HR',
     url: 'https://www.kazinihr.com/',
-    description: 'All-in-one HR solution for your team',
+    description: 'All-in-one HR solution for you & your team',
     images: [
       'https://lh5.googleusercontent.com/p/AF1QipPj5KMwbKxeb2tsY8g77WRx15C7vtLfrnCXGzTa=w652-h160-k-no',
     ],
