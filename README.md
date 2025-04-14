@@ -1,4 +1,4 @@
-# Student Management Information System
+# Human Resource Management Information System
 
 This repository contains the code for a Student Management Information System Landing Page and Role-based Dashboard.
 
