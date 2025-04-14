@@ -1,20 +1,22 @@
-"use client";
+'use client';
 
-import Link from "next/link";
+import Link from 'next/link';
 import {
   Popover,
   PopoverButton,
   PopoverOverlay,
   PopoverPanel,
-} from "@headlessui/react";
-import { AnimatePresence, motion } from "framer-motion";
+} from '@headlessui/react';
+import { AnimatePresence, motion } from 'framer-motion';
 
-import { Container } from "./container";
-import { NavLinks } from "./nav-links";
-import { Button } from "./button";
-import SVGLogo from "./svg-logo";
+import { Container } from './container';
+import { NavLinks } from './nav-links';
+import { Button } from './button';
+import SVGLogo from './svg-logo';
+import Image from 'next/image';
+import { externalLinks } from '../lib/utils/external-links';
 
-function MenuIcon(props: React.ComponentPropsWithoutRef<"svg">) {
+function MenuIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>
       <path
@@ -27,7 +29,7 @@ function MenuIcon(props: React.ComponentPropsWithoutRef<"svg">) {
   );
 }
 
-function ChevronUpIcon(props: React.ComponentPropsWithoutRef<"svg">) {
+function ChevronUpIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>
       <path
@@ -43,7 +45,7 @@ function ChevronUpIcon(props: React.ComponentPropsWithoutRef<"svg">) {
 function MobileNavLink(
   props: Omit<
     React.ComponentPropsWithoutRef<typeof PopoverButton<typeof Link>>,
-    "as" | "className"
+    'as' | 'className'
   >
 ) {
   return (
@@ -62,15 +64,22 @@ export function Header() {
         <Container className="flex relative z-50 justify-between py-8">
           <div className="flex relative z-10 gap-16 justify-between items-center w-full">
             <Link href="/" className="flex gap-2 items-center font-semibold">
-              <SVGLogo />
-              <span className="text-lg font-bold text-slate-800">
-                Quillminds
-              </span>
+              <Image
+                src="/images/kazini-hr-original-colors-removebg-preview.png"
+                alt="logo"
+                width={150}
+                height={150}
+              />
             </Link>
             <div className="hidden justify-center items-center lg:flex lg:gap-10">
               <NavLinks />
-              <Button href="/sign-up" color="blue">
-                Get Started
+              <Button
+                href={externalLinks.calendlyCEO}
+                rel="noopener noreferrer"
+                target="_blank"
+                color="yellow_dark"
+              >
+                Book A Demo
               </Button>
             </div>
           </div>
@@ -120,8 +129,8 @@ export function Header() {
                             <MobileNavLink href="/#pricing">
                               Pricing
                             </MobileNavLink>
-                            <MobileNavLink href="/#faq">FAQs</MobileNavLink>
-                            <MobileNavLink href="/blog">Blog</MobileNavLink>
+                            {/* <MobileNavLink href="/#faq">FAQs</MobileNavLink>
+                            <MobileNavLink href="/blog">Blog</MobileNavLink> */}
                           </div>
                           <div className="flex flex-col gap-4 mt-8">
                             <Button href="/" outline>

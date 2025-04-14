@@ -2,7 +2,7 @@ import FormModal from '@/app/components/form-modal';
 import Pagination from '@/app/components/pagination';
 import Table from '@/app/components/table';
 import TableSearch from '@/app/components/table-search';
-import { role, teachersData } from '@/app/lib/data';
+import { role, execsData } from '@/app/lib/data';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -97,7 +97,7 @@ const TeachersList = () => {
         </div>
       </div>
       {/* list */}
-      <Table columns={columns} renderRow={renderRow} data={teachersData} />
+      <Table columns={columns} renderRow={renderRow} data={execsData} />
       {/* pagination */}
       <Pagination />
     </div>

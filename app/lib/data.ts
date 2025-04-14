@@ -2,7 +2,7 @@
 
 export let role = 'admin';
 
-export const teachersData = [
+export const execsData = [
   {
     id: 1,
     teacherId: '1234567890',
@@ -125,7 +125,7 @@ export const teachersData = [
   },
 ];
 
-export const studentsData = [
+export const employeesData = [
   {
     id: 1,
     studentId: '1234567890',
@@ -248,7 +248,7 @@ export const studentsData = [
   },
 ];
 
-export const parentsData = [
+export const managersData = [
   {
     id: 1,
     name: 'John Doe',

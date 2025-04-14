@@ -2,7 +2,7 @@ import FormModal from '@/app/components/form-modal';
 import Pagination from '@/app/components/pagination';
 import Table from '@/app/components/table';
 import TableSearch from '@/app/components/table-search';
-import { parentsData, role } from '@/app/lib/data';
+import { managersData, role } from '@/app/lib/data';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -77,7 +77,7 @@ const ParentsList = () => {
         </div>
       </div>
       {/* list */}
-      <Table columns={columns} renderRow={renderRow} data={parentsData} />
+      <Table columns={columns} renderRow={renderRow} data={managersData} />
       {/* pagination */}
       <Pagination />
     </div>

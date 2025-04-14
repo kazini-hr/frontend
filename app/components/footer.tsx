@@ -1,7 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
-import SVGLogo from "./svg-logo";
-import artemImg from "../../public/artem.png";
+import Image from 'next/image';
+import Link from 'next/link';
+import { externalLinks } from '../lib/utils/external-links';
 
 export default function Footer() {
   return (
@@ -14,14 +13,16 @@ export default function Footer() {
               aria-current="page"
               className="flex gap-2 justify-center items-center md:justify-start"
             >
-              <SVGLogo />
-              <strong className="text-base font-extrabold tracking-tight text-slate-800 md:text-lg">
-                Quillminds
-              </strong>
+              <Image
+                src="/images/kazini-hr-original-colors-removebg-preview.png"
+                alt="logo"
+                width={100}
+                height={100}
+              />
             </Link>
             <p className="mt-3 text-sm text-slate-700">
-              AI-powered lesson planning made easy. Create engaging and
-              personalized lessons in minutes.
+              All-in-one HR, Payroll and Benefits software where you can
+              automate all your business needs in a matter of minutes
             </p>
             <p className="mt-3 text-sm text-slate-700">
               Copyright © {new Date().getFullYear()} - All rights reserved
@@ -34,13 +35,13 @@ export default function Footer() {
               </div>
               <div className="flex flex-col gap-2 justify-center items-center mb-10 text-sm text-slate-700 hover:text-slate-900 md:items-start">
                 <a
-                  href="mailto:contact@quillminds.com"
+                  href="mailto:oliver@kazinihr.co.ke"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="link link-hover"
                   aria-label="Contact Support"
                 >
-                  Support
+                  Support & Enquiries
                 </a>
                 <Link href="/#pricing" className="link link-hover">
                   Pricing
@@ -52,44 +53,23 @@ export default function Footer() {
                 LEGAL
               </div>
               <div className="flex flex-col gap-2 justify-center items-center mb-10 text-sm text-slate-700 hover:text-slate-900 md:items-start">
-                <Link href="/tos" className="link link-hover">
+                <Link
+                  href={externalLinks.termsOfService}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  className="link link-hover"
+                >
                   Terms of services
                 </Link>
-                <Link href="/privacy-policy" className="link link-hover">
+                <Link
+                  href={externalLinks.privacyPolicy}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  className="link link-hover"
+                >
                   Privacy policy
                 </Link>
               </div>
-            </div>
-          </div>
-        </div>
-        <div className="mt-12 text-sm md:mt-16">
-          <div className="flex flex-row gap-4 justify-start items-center">
-            <Image
-              alt="Artem Kirsanov"
-              src={artemImg}
-              width={48}
-              height={48}
-              className="object-cover w-12 rounded-full aspect-square"
-            />
-            <div className="leading-relaxed text-left text-base-content-secondary">
-              Hey Curious 👋 I&apos;m{" "}
-              <a
-                href="#"
-                target="_blank"
-                rel="noreferrer"
-                className="font-medium link text-base-content"
-              >
-                Artem
-              </a>
-              , the creator of QuillMinds. You can follow my work on{" "}
-              <a
-                href="https://x.com/kirsnvartem"
-                target="_blank"
-                rel="noreferrer"
-                className="font-medium link text-base-content"
-              >
-                X.
-              </a>
             </div>
           </div>
         </div>
