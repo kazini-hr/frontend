@@ -4,8 +4,9 @@ export default function TestimonialSingle({
   testimonial: {
     name: string;
     content: React.ReactNode;
-    schoolName: string;
+    businessName: string;
     image: string;
+    rounded?: boolean;
   };
 }) {
   const image = testimonial.image;
@@ -18,7 +19,7 @@ export default function TestimonialSingle({
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
-            className="h-5 w-5 text-yellow-500"
+            className="h-5 w-5 text-gold"
           >
             <path
               fillRule="evenodd"
@@ -39,13 +40,17 @@ export default function TestimonialSingle({
           height="48"
           decoding="async"
           data-nimg="1"
-          className="h-10 w-10 rounded-full object-cover md:h-12 md:w-12"
-          style={{ color: "transparent" }}
+          className={`${
+            testimonial.rounded
+              ? 'h-10 w-10 rounded-full object-cover'
+              : 'h-10 w-20 rounded-md object-contain'
+          } md:h-12 md:w-12`}
+          style={{ color: 'transparent' }}
           src={image}
         />
         <div>
           <p className="font-semibold text-slate-800">{testimonial.name}</p>
-          <p className="text-sm text-slate-600">{testimonial.schoolName}</p>
+          <p className="text-sm text-slate-600">{testimonial.businessName}</p>
         </div>
       </div>
     </div>

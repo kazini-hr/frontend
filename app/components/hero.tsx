@@ -1,32 +1,48 @@
-import { Button } from "./button";
-import TestimonialsAvatars from "./testimonials-avatars";
+import Image from 'next/image';
+import { Button } from './button';
+import TestimonialsAvatars from './testimonials-avatars';
+import { externalLinks } from '../lib/utils/external-links';
 
 function Hero({ config }: { config?: any }) {
   return (
     <div>
       <div className="mx-auto flex max-w-5xl flex-col items-center justify-center px-8 py-12 pt-4 lg:px-12 lg:py-24">
-        <div className="mx-auto mb-8 max-w-2xl py-8 sm:py-8 lg:py-8">
+        <div className="mx-auto mb-8 max-w-5xl flex flex-col lg:flex-row items-center lg:items-start lg:justify-between py-8 sm:py-8 lg:py-8">
           <div className="hidden sm:flex sm:justify-center"></div>
-          <div className="mt-2 text-center">
+          {/* Text Content */}
+          <div className="mt-2 text-center lg:text-left lg:w-1/2">
             <h1 className="text-4xl font-black tracking-tight text-slate-800 sm:text-6xl">
-              Focus on teaching,
-              <br /> not endless preparation.
+              Spend 80% less time on payroll every month
             </h1>
             <p className="mt-6 text-base font-light leading-8 text-secondary-foreground text-slate-500 sm:text-lg">
-              AI-Powered Lesson Planning Made Easy. For teachers at any level.
+              With Kazini's all-in-one HR, Payroll and Benefits software you can
+              automate everything from salary calculations to statutory payments
+              and run payroll all in a matter of minutes
             </p>
             <div className="mt-10 flex flex-col items-center justify-center gap-y-6">
               <Button
-                color="blue"
-                href={"/sign-up"}
+                href={externalLinks.calendlyCEO}
+                rel="noopener noreferrer"
+                target="_blank"
+                color="yellow_dark"
                 className="h-12 w-64 rounded-md"
               >
                 Get Started
               </Button>
             </div>
           </div>
+          {/* Image Content */}
+          <div className="hidden lg:flex lg:w-1/2 justify-center">
+            <Image
+              src="/1.png"
+              alt="hero illustration"
+              height={2000}
+              width={2000}
+              className="max-w-full h-auto"
+            />
+          </div>
         </div>
-        <HeroFooter />
+        {/* <HeroFooter /> */}
         {/* <TestimonialsAvatars priority={true} /> */}
       </div>
     </div>

@@ -1,20 +1,20 @@
-"use client";
-import React, { useState } from "react";
-import TestimonialSingle from "./testimonial-single";
-import feature1 from "../../public/feature_1.gif";
-import feature2 from "../../public/feature_2.png";
-import feature3 from "../../public/feature_3.gif";
+'use client';
+import React, { useState } from 'react';
+import TestimonialSingle from './testimonial-single';
+import feature1 from '../../public/feature_1.gif';
+import feature2 from '../../public/feature_2.png';
+import feature3 from '../../public/feature_3.gif';
 
 const features = [
   {
     id: 1,
-    title: "AI-Powered Lesson Creation",
+    title: 'AI-Powered Lesson Creation',
     description:
-      "Say goodbye to hours of planning. Our AI creates engaging lesson plans in minutes, giving you more time to focus on what matters most - your students.",
+      'Say goodbye to hours of planning. Our AI creates engaging lesson plans in minutes, giving you more time to focus on what matters most - your students.',
     additionalInfo: [
-      "Save hours of prep time",
-      "Get fresh, creative ideas",
-      "Customize to your needs",
+      'Save hours of prep time',
+      'Get fresh, creative ideas',
+      'Customize to your needs',
     ],
     icons: [
       <svg
@@ -58,13 +58,13 @@ const features = [
   },
   {
     id: 2,
-    title: "One-Click Resource Generation",
+    title: 'One-Click Resource Generation',
     description:
       "Need a quiz, worksheet, or study guide? Our AI creates them instantly. Just choose what you need, and it's done - saving you time and boosting your productivity.",
     additionalInfo: [
-      "Instant resource creation",
-      "Multiple resource types",
-      "Perfectly aligned with your lessons",
+      'Instant resource creation',
+      'Multiple resource types',
+      'Perfectly aligned with your lessons',
     ],
     icons: [
       <svg
@@ -107,13 +107,13 @@ const features = [
   },
   {
     id: 3,
-    title: "Easy Editing and Sharing",
+    title: 'Easy Editing and Sharing',
     description:
       "Tweak AI-generated content to perfection and share it instantly. Edit with ease, export as a polished PDF, and you're ready to teach - it's that simple!",
     additionalInfo: [
-      "User-friendly editing",
-      "Professional PDF export",
-      "Ready to use in class",
+      'User-friendly editing',
+      'Professional PDF export',
+      'Ready to use in class',
     ],
     icons: [
       <svg
@@ -165,9 +165,9 @@ export default function AccordionFeatures({ config }: { config?: any }) {
     >
       <div className="px-8">
         <h2 className="mb-12 text-4xl font-extrabold tracking-tight text-slate-800 md:mb-24 lg:text-5xl">
-          AI-powered lesson preparation <br />
+          Business and Human resource management <br />
           <span className="relative mt-2 inline-block">
-            <span className="absolute inset-0 -rotate-1 transform bg-blue-600"></span>
+            <span className="absolute inset-0 -rotate-1 transform bg-midYellow"></span>
             <span className="relative z-10 px-2 py-2 text-white">
               made easy
             </span>
@@ -179,7 +179,7 @@ export default function AccordionFeatures({ config }: { config?: any }) {
               {features.map((feature) => (
                 <li
                   key={feature.id}
-                  className={feature.id !== features.length ? "border-b" : ""}
+                  className={feature.id !== features.length ? 'border-b' : ''}
                 >
                   <button
                     className="relative flex w-full items-center gap-2 py-4 text-left text-base font-medium md:text-lg"
@@ -189,17 +189,17 @@ export default function AccordionFeatures({ config }: { config?: any }) {
                     <span
                       className={`duration-100 ${
                         activeFeature === feature.id
-                          ? "font-bold text-blue-600"
-                          : ""
+                          ? 'font-bold text-blue-600'
+                          : ''
                       }`}
                     >
-                      {feature.id}.{" "}
+                      {feature.id}.{' '}
                     </span>
                     <span
                       className={`flex-1 text-slate-700 ${
                         activeFeature === feature.id
-                          ? "font-bold text-blue-600"
-                          : ""
+                          ? 'font-bold text-blue-600'
+                          : ''
                       }`}
                     >
                       <h3 className="inline">{feature.title}</h3>
@@ -216,7 +216,7 @@ export default function AccordionFeatures({ config }: { config?: any }) {
                           height="2"
                           rx="1"
                           className={`origin-center transform transition duration-200 ease-out ${
-                            activeFeature === feature.id ? "rotate-180" : ""
+                            activeFeature === feature.id ? 'rotate-180' : ''
                           }`}
                         />
                         <rect
@@ -226,8 +226,8 @@ export default function AccordionFeatures({ config }: { config?: any }) {
                           rx="1"
                           className={`origin-center rotate-90 transform transition duration-200 ease-out ${
                             activeFeature === feature.id
-                              ? "hidden rotate-180"
-                              : ""
+                              ? 'hidden rotate-180'
+                              : ''
                           }`}
                         />
                       </svg>
@@ -236,7 +236,7 @@ export default function AccordionFeatures({ config }: { config?: any }) {
                   <div
                     className="overflow-hidden text-slate-700 transition-all duration-300 ease-in-out"
                     style={{
-                      maxHeight: activeFeature === feature.id ? "1000px" : "0",
+                      maxHeight: activeFeature === feature.id ? '1000px' : '0',
                       opacity: activeFeature === feature.id ? 1 : 0,
                     }}
                   >
@@ -279,18 +279,18 @@ export default function AccordionFeatures({ config }: { config?: any }) {
                   data-nimg="1"
                   className={`w-full rounded-[16px] border bg-slate-50 object-contain object-center transition-opacity duration-300 sm:-m-2 sm:w-[26rem] sm:p-2 ${
                     activeFeature === feature.id
-                      ? "opacity-100"
-                      : "hidden opacity-0"
+                      ? 'opacity-100'
+                      : 'hidden opacity-0'
                   }`}
-                  style={{ color: "transparent" }}
-                  src={feature.image?.src || ""}
+                  style={{ color: 'transparent' }}
+                  src={feature.image?.src || ''}
                 />
               ))}
             </div>
           </div>
         </div>
       </div>
-      <TestimonialSingle
+      {/* <TestimonialSingle
         testimonial={{
           name: "Sarah Johnson",
           content:
@@ -298,7 +298,7 @@ export default function AccordionFeatures({ config }: { config?: any }) {
           schoolName: "Oakridge Elementary",
           image: "https://api.dicebear.com/6.x/avataaars/svg?seed=Sarah",
         }}
-      />
+      /> */}
     </section>
   );
 }
