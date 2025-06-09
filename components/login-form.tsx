@@ -7,10 +7,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { login } from "@/actions/auth";
 import useFetch from "@/hooks/use-fetch";
-import { Toaster } from "sonner";
+import { Toaster, toast } from "sonner";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAuthStore } from "@/lib/store/authStore";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z
@@ -30,7 +32,8 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const { data, loading, error, fn: doLogin } = useFetch(login);
+  const { isLoading, error, login: doLogin, clearError } = useAuthStore();
+  const router = useRouter();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(formSchema),
@@ -47,12 +50,16 @@ export function LoginForm({
   } = form;
 
   const onSubmit = async (values: LoginFormValues) => {
-    await doLogin(values);
-  };
+    clearError(); // Clear any previous errors
+    const success = await doLogin(values.email, values.password);
 
-  console.log("Login response:", data);
-  console.log("Login loading:", loading);
-  console.log("Login error:", error);
+    if (useAuthStore.getState().isAuthenticated) {
+      toast.success("Login successful!");
+      router.push("/admin");
+    } else if (error) {
+      toast.error(error);
+    }
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -69,6 +76,11 @@ export function LoginForm({
                   Login to your Kazini HR account
                 </p>
               </div>
+              {error && (
+                <div className="p-3 text-sm bg-red-50 border border-red-200 text-red-600 rounded-md">
+                  {error}
+                </div>
+              )}
               <div className="grid gap-2 text-kaziniBlue">
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -106,9 +118,9 @@ export function LoginForm({
               <Button
                 type="submit"
                 className="w-full bg-kaziniBlue hover:bg-kaziniBlueLight"
-                disabled={loading}
+                disabled={isLoading}
               >
-                {loading ? "Logging in..." : "Login"}
+                {isLoading ? "Logging in..." : "Login"}
               </Button>
               <div className="text-center text-sm text-kaziniBlue">
                 Don&apos;t have an account?{" "}
