@@ -1,11 +1,11 @@
-import FormModal from '@/app/components/form-modal';
-import Pagination from '@/app/components/pagination';
-import Table from '@/app/components/table';
-import TableSearch from '@/app/components/table-search';
-import { classesData, role } from '@/app/lib/data';
-import Image from 'next/image';
-import Link from 'next/link';
-import React from 'react';
+import FormModal from "@/components/form-modal";
+import Pagination from "@/components/pagination";
+import Table from "@/components/table";
+import TableSearch from "@/components/table-search";
+import { classesData, role } from "@/app/lib/data";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
 type ClassInfo = {
   id: number;
@@ -16,23 +16,23 @@ type ClassInfo = {
 };
 
 const columns = [
-  { header: 'Class Name', accessor: 'name' },
+  { header: "Class Name", accessor: "name" },
   {
-    header: 'Capacity',
-    accessor: 'capacity',
-    className: 'hidden md:table-cell',
+    header: "Capacity",
+    accessor: "capacity",
+    className: "hidden md:table-cell",
   },
   {
-    header: 'Grade',
-    accessor: 'grade',
-    className: 'hidden md:table-cell',
+    header: "Grade",
+    accessor: "grade",
+    className: "hidden md:table-cell",
   },
   {
-    header: 'Supervisor',
-    accessor: 'supervisor',
-    className: 'hidden md:table-cell',
+    header: "Supervisor",
+    accessor: "supervisor",
+    className: "hidden md:table-cell",
   },
-  { header: 'Actions', accessor: 'actions' },
+  { header: "Actions", accessor: "actions" },
 ];
 
 const ClassesList = () => {
@@ -52,7 +52,7 @@ const ClassesList = () => {
         <td className="hidden md:table-cell">{item.supervisor}</td>
         <td>
           <div className="flex items-center gap-2">
-            {role === 'admin' && (
+            {role === "admin" && (
               <>
                 <FormModal table="class" type="update" data={item} />
                 <FormModal table="class" type="delete" id={item.id} />
@@ -78,7 +78,7 @@ const ClassesList = () => {
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === 'admin' && <FormModal table="class" type="create" />}
+            {role === "admin" && <FormModal table="class" type="create" />}
           </div>
         </div>
       </div>

@@ -1,11 +1,11 @@
-import FormModal from '@/app/components/form-modal';
-import Pagination from '@/app/components/pagination';
-import Table from '@/app/components/table';
-import TableSearch from '@/app/components/table-search';
-import { managersData, role } from '@/app/lib/data';
-import Image from 'next/image';
-import Link from 'next/link';
-import React from 'react';
+import FormModal from "@/components/form-modal";
+import Pagination from "@/components/pagination";
+import Table from "@/components/table";
+import TableSearch from "@/components/table-search";
+import { managersData, role } from "@/app/lib/data";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
 type ParentInfo = {
   id: number;
@@ -17,15 +17,15 @@ type ParentInfo = {
 };
 
 const columns = [
-  { header: 'Info', accessor: 'info' },
+  { header: "Info", accessor: "info" },
   {
-    header: 'Student Names',
-    accessor: 'students',
-    className: 'hidden md:table-cell',
+    header: "Student Names",
+    accessor: "students",
+    className: "hidden md:table-cell",
   },
-  { header: 'Phone', accessor: 'phone', className: 'hidden md:table-cell' },
-  { header: 'Address', accessor: 'address', className: 'hidden md:table-cell' },
-  { header: 'Actions', accessor: 'actions' },
+  { header: "Phone", accessor: "phone", className: "hidden md:table-cell" },
+  { header: "Address", accessor: "address", className: "hidden md:table-cell" },
+  { header: "Actions", accessor: "actions" },
 ];
 
 const ParentsList = () => {
@@ -41,12 +41,12 @@ const ParentsList = () => {
             <h4 className="text-xs text-gray-500">{item.email}</h4>
           </div>
         </td>
-        <td className="hidden md:table-cell">{item.students.join(',')}</td>
+        <td className="hidden md:table-cell">{item.students.join(",")}</td>
         <td className="hidden md:table-cell">{item.phone}</td>
         <td className="hidden md:table-cell">{item.address}</td>
         <td>
           <div className="flex items-center gap-2">
-            {role === 'admin' && (
+            {role === "admin" && (
               <>
                 <FormModal table="parent" type="update" data={item} />
                 <FormModal table="parent" type="delete" id={item.id} />
@@ -72,7 +72,7 @@ const ParentsList = () => {
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === 'admin' && <FormModal table="parent" type="create" />}
+            {role === "admin" && <FormModal table="parent" type="create" />}
           </div>
         </div>
       </div>

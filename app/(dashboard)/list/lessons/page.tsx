@@ -1,11 +1,11 @@
-import FormModal from '@/app/components/form-modal';
-import Pagination from '@/app/components/pagination';
-import Table from '@/app/components/table';
-import TableSearch from '@/app/components/table-search';
-import { classesData, lessonsData, role } from '@/app/lib/data';
-import Image from 'next/image';
-import Link from 'next/link';
-import React from 'react';
+import FormModal from "@/components/form-modal";
+import Pagination from "@/components/pagination";
+import Table from "@/components/table";
+import TableSearch from "@/components/table-search";
+import { classesData, lessonsData, role } from "@/app/lib/data";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
 type LessonsInfo = {
   id: number;
@@ -15,17 +15,17 @@ type LessonsInfo = {
 };
 
 const columns = [
-  { header: 'Subject Name', accessor: 'subject' },
+  { header: "Subject Name", accessor: "subject" },
   {
-    header: 'Class Name',
-    accessor: 'class',
+    header: "Class Name",
+    accessor: "class",
   },
   {
-    header: 'Teacher',
-    accessor: 'teacher',
-    className: 'hidden md:table-cell',
+    header: "Teacher",
+    accessor: "teacher",
+    className: "hidden md:table-cell",
   },
-  { header: 'Actions', accessor: 'actions' },
+  { header: "Actions", accessor: "actions" },
 ];
 
 const LessonsList = () => {
@@ -44,7 +44,7 @@ const LessonsList = () => {
         <td className="hidden md:table-cell">{item.teacher}</td>
         <td>
           <div className="flex items-center gap-2">
-            {role === 'admin' && (
+            {role === "admin" && (
               <>
                 <FormModal table="lesson" type="update" data={item} />
                 <FormModal table="lesson" type="delete" id={item.id} />
@@ -70,7 +70,7 @@ const LessonsList = () => {
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === 'admin' && <FormModal table="lesson" type="create" />}
+            {role === "admin" && <FormModal table="lesson" type="create" />}
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
-import Image from 'next/image';
-import { Button } from './button';
-import TestimonialsAvatars from './testimonials-avatars';
-import { externalLinks } from '../lib/utils/external-links';
+import Image from "next/image";
+import { Button } from "./ui/button";
+import TestimonialsAvatars from "./testimonials-avatars";
+import { externalLinks } from "../app/lib/utils/external-links";
 
 function Hero({ config }: { config?: any }) {
   return (

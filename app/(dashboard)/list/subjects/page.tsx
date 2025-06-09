@@ -1,11 +1,11 @@
-import FormModal from '@/app/components/form-modal';
-import Pagination from '@/app/components/pagination';
-import Table from '@/app/components/table';
-import TableSearch from '@/app/components/table-search';
-import { role, subjectsData } from '@/app/lib/data';
-import Image from 'next/image';
-import Link from 'next/link';
-import React from 'react';
+import FormModal from "@/components/form-modal";
+import Pagination from "@/components/pagination";
+import Table from "@/components/table";
+import TableSearch from "@/components/table-search";
+import { role, subjectsData } from "@/app/lib/data";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
 type SubjectInfo = {
   id: number;
@@ -14,13 +14,13 @@ type SubjectInfo = {
 };
 
 const columns = [
-  { header: 'Subject Name', accessor: 'name' },
+  { header: "Subject Name", accessor: "name" },
   {
-    header: 'Teachers',
-    accessor: 'teachers',
-    className: 'hidden md:table-cell',
+    header: "Teachers",
+    accessor: "teachers",
+    className: "hidden md:table-cell",
   },
-  { header: 'Actions', accessor: 'actions' },
+  { header: "Actions", accessor: "actions" },
 ];
 
 const SubjectsList = () => {
@@ -35,10 +35,10 @@ const SubjectsList = () => {
             <h3 className="font-semibold">{item.name}</h3>
           </div>
         </td>
-        <td className="hidden md:table-cell">{item.teachers.join(',')}</td>
+        <td className="hidden md:table-cell">{item.teachers.join(",")}</td>
         <td>
           <div className="flex items-center gap-2">
-            {role === 'admin' && (
+            {role === "admin" && (
               <>
                 <FormModal table="subject" type="update" data={item} />
                 <FormModal table="subject" type="delete" id={item.id} />
@@ -64,7 +64,7 @@ const SubjectsList = () => {
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === 'admin' && <FormModal table="subject" type="create" />}
+            {role === "admin" && <FormModal table="subject" type="create" />}
           </div>
         </div>
       </div>

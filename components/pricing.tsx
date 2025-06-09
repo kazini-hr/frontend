@@ -1,7 +1,7 @@
-'use client';
-import TestimonialSingle from './testimonial-single';
-import { Button } from './button';
-import { externalLinks } from '../lib/utils/external-links';
+"use client";
+import TestimonialSingle from "./testimonial-single";
+import { Button } from "./ui/button";
+import { externalLinks } from "../app/lib/utils/external-links";
 export default function Pricing({ config }: { config?: any }) {
   return (
     <section className="overflow-hidden bg-slate-50" id="pricing">
@@ -55,11 +55,11 @@ export default function Pricing({ config }: { config?: any }) {
         </div>
         <TestimonialSingle
           testimonial={{
-            name: 'Malcolm Olero',
+            name: "Malcolm Olero",
             content:
-              'Switching to Kazini was one of the best decisions we made! The platform is intuitive, feature-rich, and has streamlined our HR processes like never before. From attendance to payroll, everything is now seamless and efficient. The customer support team is also incredibly responsive and helpful. Highly recommend!',
-            businessName: 'Evon International Energy',
-            image: '/EVON.png',
+              "Switching to Kazini was one of the best decisions we made! The platform is intuitive, feature-rich, and has streamlined our HR processes like never before. From attendance to payroll, everything is now seamless and efficient. The customer support team is also incredibly responsive and helpful. Highly recommend!",
+            businessName: "Evon International Energy",
+            image: "/EVON.png",
             rounded: false,
           }}
         />
@@ -86,7 +86,7 @@ function PricingCard({
   description: string;
 }) {
   return (
-    <div className={`relative w-full max-w-lg ${isFeatured ? 'lg:-mt-4' : ''}`}>
+    <div className={`relative w-full max-w-lg ${isFeatured ? "lg:-mt-4" : ""}`}>
       {isFeatured && (
         <div className="absolute left-1/2 top-0 z-20 -translate-x-1/2 -translate-y-1/2">
           <span className="whitespace-nowrap rounded-full bg-darkYellow px-2 py-1 text-xs font-semibold text-white">
@@ -96,7 +96,7 @@ function PricingCard({
       )}
       <div
         className={`relative z-10 h-full rounded-lg ${
-          isFeatured ? 'ring-2 ring-darkYellow' : 'border border-zinc-200'
+          isFeatured ? "ring-2 ring-darkYellow" : "border border-zinc-200"
         }`}
       >
         <div className="flex h-full flex-col gap-5 rounded-lg bg-white p-8 lg:gap-8">
@@ -107,7 +107,7 @@ function PricingCard({
           <div className="flex flex-wrap items-end gap-2">
             <div
               className={`mb-[4px] flex flex-col justify-end text-lg ${
-                isFeatured ? '' : 'hidden'
+                isFeatured ? "" : "hidden"
               }`}
             >
               <p className="relative">
@@ -126,7 +126,7 @@ function PricingCard({
           </div>
           <ul
             className={`flex-1 space-y-2.5 text-base leading-relaxed ${
-              isFeatured ? 'text-green-600' : 'text-slate-700'
+              isFeatured ? "text-green-600" : "text-slate-700"
             }`}
           >
             {features.map((feature, index) => (

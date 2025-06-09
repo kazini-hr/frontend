@@ -16,13 +16,24 @@ pnpm dev
 bun dev
 ```
 
+Next, make sure the backend NestJS server is running:
+
+```bash
+# Navigate to backend directory and run
+npm run start:dev
+# or
+yarn start:dev
+```
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## 🛠 Tech Stack
 
 - [Next.js](https://nextjs.org/)
 - [React](https://reactjs.org/)
-- [Vercel](https://vercel.com/) for deployment
+- [NestJS](https://nestjs.com/) for backend
+- [Zustand](https://github.com/pmndrs/zustand) for state management
+- [Vercel](https://vercel.com/) for frontend deployment
 
 ## 📚 Learn More
 

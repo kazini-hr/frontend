@@ -1,7 +1,7 @@
-import React from 'react';
-import { Button } from './button';
-import Image from 'next/image';
-import { externalLinks } from '../lib/utils/external-links';
+import React from "react";
+import { Button } from "./ui/button";
+import Image from "next/image";
+import { externalLinks } from "../app/lib/utils/external-links";
 
 export default function CTA({ config }: { config?: any }) {
   return (

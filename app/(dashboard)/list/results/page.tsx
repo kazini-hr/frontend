@@ -1,11 +1,11 @@
-import FormModal from '@/app/components/form-modal';
-import Pagination from '@/app/components/pagination';
-import Table from '@/app/components/table';
-import TableSearch from '@/app/components/table-search';
-import { resultsData, role } from '@/app/lib/data';
-import Image from 'next/image';
-import Link from 'next/link';
-import React from 'react';
+import FormModal from "@/components/form-modal";
+import Pagination from "@/components/pagination";
+import Table from "@/components/table";
+import TableSearch from "@/components/table-search";
+import { resultsData, role } from "@/app/lib/data";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
 type ResultInfo = {
   id: number;
@@ -14,37 +14,37 @@ type ResultInfo = {
   teacher: string;
   student: string;
   date: string;
-  type: 'exam' | 'assignment';
+  type: "exam" | "assignment";
   score: number;
 };
 
 const columns = [
-  { header: 'Subject Name', accessor: 'subject' },
+  { header: "Subject Name", accessor: "subject" },
   {
-    header: 'Student',
-    accessor: 'student',
+    header: "Student",
+    accessor: "student",
   },
   {
-    header: 'Score',
-    accessor: 'score',
-    className: 'hidden md:table-cell',
+    header: "Score",
+    accessor: "score",
+    className: "hidden md:table-cell",
   },
   {
-    header: 'Teacher',
-    accessor: 'teacher',
-    className: 'hidden md:table-cell',
+    header: "Teacher",
+    accessor: "teacher",
+    className: "hidden md:table-cell",
   },
   {
-    header: 'Class',
-    accessor: 'class',
-    className: 'hidden md:table-cell',
+    header: "Class",
+    accessor: "class",
+    className: "hidden md:table-cell",
   },
   {
-    header: 'Date',
-    accessor: 'dueDate',
-    className: 'hidden md:table-cell',
+    header: "Date",
+    accessor: "dueDate",
+    className: "hidden md:table-cell",
   },
-  { header: 'Actions', accessor: 'actions' },
+  { header: "Actions", accessor: "actions" },
 ];
 
 const ResultsList = () => {
@@ -66,7 +66,7 @@ const ResultsList = () => {
         <td className="hidden md:table-cell">{item.date}</td>
         <td>
           <div className="flex items-center gap-2">
-            {role === 'admin' && (
+            {role === "admin" && (
               <>
                 <FormModal table="result" type="update" data={item} />
                 <FormModal table="result" type="delete" id={item.id} />
@@ -92,7 +92,7 @@ const ResultsList = () => {
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === 'admin' && <FormModal table="result" type="create" />}
+            {role === "admin" && <FormModal table="result" type="create" />}
           </div>
         </div>
       </div>

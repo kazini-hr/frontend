@@ -1,11 +1,11 @@
-import FormModal from '@/app/components/form-modal';
-import Pagination from '@/app/components/pagination';
-import Table from '@/app/components/table';
-import TableSearch from '@/app/components/table-search';
-import { role, employeesData } from '@/app/lib/data';
-import Image from 'next/image';
-import Link from 'next/link';
-import React from 'react';
+import FormModal from "@/components/form-modal";
+import Pagination from "@/components/pagination";
+import Table from "@/components/table";
+import TableSearch from "@/components/table-search";
+import { role, employeesData } from "@/app/lib/data";
+import Image from "next/image";
+import Link from "next/link";
+import React from "react";
 
 type StudentInfo = {
   id: number;
@@ -20,21 +20,21 @@ type StudentInfo = {
 };
 
 const columns = [
-  { header: 'Info', accessor: 'info' },
+  { header: "Info", accessor: "info" },
   {
-    header: 'Student ID',
-    accessor: 'studentId',
-    className: 'hidden md:table-cell',
+    header: "Student ID",
+    accessor: "studentId",
+    className: "hidden md:table-cell",
   },
   {
-    header: 'Grade',
-    accessor: 'grade',
-    className: 'hidden md:table-cell',
+    header: "Grade",
+    accessor: "grade",
+    className: "hidden md:table-cell",
   },
-  { header: 'Email', accessor: 'email', className: 'hidden md:table-cell' },
-  { header: 'Phone', accessor: 'phone', className: 'hidden lg:table-cell' },
-  { header: 'Address', accessor: 'address', className: 'hidden lg:table-cell' },
-  { header: 'Actions', accessor: 'actions' },
+  { header: "Email", accessor: "email", className: "hidden md:table-cell" },
+  { header: "Phone", accessor: "phone", className: "hidden lg:table-cell" },
+  { header: "Address", accessor: "address", className: "hidden lg:table-cell" },
+  { header: "Actions", accessor: "actions" },
 ];
 
 const StudentsList = () => {
@@ -69,7 +69,7 @@ const StudentsList = () => {
                 <Image src="/view.png" alt="" width={16} height={16} />
               </button>
             </Link>
-            {role === 'admin' && (
+            {role === "admin" && (
               <FormModal table="student" type="delete" id={item.id} />
             )}
           </div>
@@ -92,7 +92,7 @@ const StudentsList = () => {
             <button className="w-8 h-8 flex items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === 'admin' && <FormModal table="student" type="create" />}
+            {role === "admin" && <FormModal table="student" type="create" />}
           </div>
         </div>
       </div>
