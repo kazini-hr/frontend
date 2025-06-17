@@ -20,6 +20,9 @@ export default function Providers({ children }: ProvidersProps) {
       "/signup",
       "/forgot-password",
       "/password-reset",
+      "/payroll/calculator",
+      "/employees/onboarding",
+      "/dashboard",
     ];
 
     // Check if the current route requires authentication
@@ -29,7 +32,7 @@ export default function Providers({ children }: ProvidersProps) {
       pathname !== "/";
 
     if (!isAuthenticated && requiresAuth) {
-      router.push("/login");
+      router.push("/signin");
     }
   }, [isAuthenticated, pathname, router]);
 

@@ -55,7 +55,7 @@ export function LoginForm({
 
     if (useAuthStore.getState().isAuthenticated) {
       toast.success("Login successful!");
-      router.push("/admin");
+      router.push("/dashboard");
     } else if (error) {
       toast.error(error);
     }
