@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
+import Link from "next/link";
 import {
   Popover,
   PopoverButton,
   PopoverOverlay,
   PopoverPanel,
-} from '@headlessui/react';
-import { AnimatePresence, motion } from 'framer-motion';
+} from "@headlessui/react";
+import { AnimatePresence, motion } from "framer-motion";
 
-import { Container } from './container';
-import { NavLinks } from './nav-links';
-import { Button } from './button';
-import SVGLogo from './svg-logo';
-import Image from 'next/image';
-import { externalLinks } from '../lib/utils/external-links';
+import { Container } from "./container";
+import { NavLinks } from "./nav-links";
+import { Button } from "./button";
+import SVGLogo from "./svg-logo";
+import Image from "next/image";
+import { externalLinks } from "../lib/utils/external-links";
 
-function MenuIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
+function MenuIcon(props: React.ComponentPropsWithoutRef<"svg">) {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>
       <path
@@ -29,7 +29,7 @@ function MenuIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
   );
 }
 
-function ChevronUpIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
+function ChevronUpIcon(props: React.ComponentPropsWithoutRef<"svg">) {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" {...props}>
       <path
@@ -45,7 +45,7 @@ function ChevronUpIcon(props: React.ComponentPropsWithoutRef<'svg'>) {
 function MobileNavLink(
   props: Omit<
     React.ComponentPropsWithoutRef<typeof PopoverButton<typeof Link>>,
-    'as' | 'className'
+    "as" | "className"
   >
 ) {
   return (
