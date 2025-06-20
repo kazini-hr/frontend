@@ -132,6 +132,12 @@ const MobileNav = ({
       {/* Sidebar */}
       <div className="fixed left-0 top-0 h-full w-64 bg-background border-r shadow-lg">
         <div className="flex items-center justify-between p-4 border-b">
+          <Image
+            src="/images/kazini-logo-only.png"
+            alt="logo"
+            width={32}
+            height={32}
+          />
           <h2 className="text-lg font-semibold">KaziniHR</h2>
           <Button variant="ghost" size="sm" onClick={onClose}>
             <X className="h-4 w-4" />
@@ -289,9 +295,12 @@ export default function OutsourcedLayout({
                 <span className="sr-only">Open navigation</span>
               </Button>
               <div>
-                <h1 className="text-lg font-semibold text-gray-900">
-                  KaziniHR
-                </h1>
+                <Image
+                  src="/images/kazini-hr-original-colors-transparent.png"
+                  alt="Kazini HR"
+                  width={100}
+                  height={100}
+                />
                 <p className="text-xs text-gray-500">Outsourced Payroll</p>
               </div>
             </div>

@@ -519,7 +519,7 @@ export default function EmployeesPage() {
 
   const filteredEmployees =
     employeeList?.filter(
-      (employee) =>
+      (employee: { accountNumber: string; bankCode: string }) =>
         employee.accountNumber
           .toLowerCase()
           .includes(searchTerm.toLowerCase()) ||
@@ -601,7 +601,8 @@ export default function EmployeesPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-green-600">
-              {employeeList?.filter((emp) => emp.isActive).length || 0}
+              {employeeList?.filter((emp: { isActive: any }) => emp.isActive)
+                .length || 0}
             </div>
           </CardContent>
         </Card>
@@ -617,8 +618,8 @@ export default function EmployeesPage() {
             <div className="text-2xl font-bold">
               KES{" "}
               {employeeList
-                ?.filter((emp) => emp.isActive)
-                .reduce((sum, emp) => sum + emp.amount, 0)
+                ?.filter((emp: { isActive: any }) => emp.isActive)
+                .reduce((sum: any, emp: { amount: any }) => sum + emp.amount, 0)
                 .toLocaleString() || "0"}
             </div>
           </CardContent>
@@ -683,7 +684,7 @@ export default function EmployeesPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredEmployees.map((employee) => (
+                {filteredEmployees.map((employee: EmployeeOutsourced) => (
                   <TableRow key={employee.id}>
                     <TableCell className="font-mono">
                       {employee.accountNumber}

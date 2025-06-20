@@ -109,7 +109,18 @@ export const mockWalletBalance: WalletBalance = {
   balance: 150000,
   currency: 'KES',
   wallet_type: 'PAYROLL',
-  last_updated: '2024-01-30T15:30:00Z'
+  last_updated: '2024-01-30T15:30:00Z',
+  wallet: {
+  id: "cmc3hb4yo0000sxx5joici81p",
+  balance: 115,
+  currency: "KES",
+  narrative: "Outsourced payroll disbursement wallet",
+  subtype: "OUTSOURCED_PAYROLL",
+  createdAt: "2025-06-19T14:31:09.792000+00:00",
+  updatedAt: "2025-06-20T14:00:56.057000+00:00"
+},
+  exists: true,
+
 };
 
 // Mock Wallet Transactions

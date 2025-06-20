@@ -131,6 +131,7 @@ export default function PayrollSummaryPage() {
   const [isProcessModalOpen, setIsProcessModalOpen] = useState(false);
 
   const { data: summary, isLoading, error } = usePayrollSummary();
+  console.log("summary", summary);
   const processPayroll = useProcessPayroll();
   const { toast } = useToast();
 
@@ -321,17 +322,18 @@ export default function PayrollSummaryPage() {
             <div className="bg-white p-3 rounded border text-sm">
               <div className="grid gap-1">
                 <div>
-                  <strong>Bank:</strong> {summary.kazinihrAccount.bankName}
+                  <strong>Bank:</strong> {summary?.kazinihrAccount?.bankName}
                 </div>
                 <div>
                   <strong>Account:</strong>{" "}
-                  {summary.kazinihrAccount.accountNumber}
+                  {summary?.kazinihrAccount?.accountNumber}
                 </div>
                 <div>
-                  <strong>Name:</strong> {summary.kazinihrAccount.accountName}
+                  <strong>Name:</strong> {summary?.kazinihrAccount?.accountName}
                 </div>
                 <div>
-                  <strong>Bank Code:</strong> {summary.kazinihrAccount.bankCode}
+                  <strong>Bank Code:</strong>{" "}
+                  {summary?.kazinihrAccount?.bankCode}
                 </div>
               </div>
             </div>

@@ -40,6 +40,7 @@ import {
   Clock,
   AlertCircle,
 } from "lucide-react";
+import { usePayrollCycleReport, usePayrollCycles } from "@/lib/api-hooks";
 
 // Mock data - replace with actual API calls
 const mockPayrollCycles = [
@@ -282,6 +283,11 @@ export default function ReportsPage() {
     startDate: "",
     endDate: "",
   });
+
+  // const { data: payrollCycleReport } = usePayrollCycleReport();
+  const { data: payrollCycles } = usePayrollCycles();
+  // console.log("payrollCycleReport", payrollCycleReport);
+  console.log("payrollCycles", payrollCycles);
 
   // Mock loading state - replace with actual API call
   const [isLoading] = useState(false);

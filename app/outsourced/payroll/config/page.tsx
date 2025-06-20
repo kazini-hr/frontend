@@ -5,6 +5,7 @@ import {
   usePayrollConfig,
   useCreatePayrollConfig,
   handleApiError,
+  useWallet,
 } from "@/lib/api-hooks";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -65,18 +66,28 @@ const PayrollConfigurationForm = ({
     { id: "wallet_2", name: "Secondary Wallet", balance: "KES 100,000" },
   ];
 
+  const { data: wallets } = useWallet();
+
+  console.log("Wallets:", wallets);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
       const data = {
         payrollPeriod: formData.payrollPeriod,
-        startDate: formData.startDate,
-        endDate: formData.endDate,
+        startDate: new Date(formData.startDate).toISOString(),
+        endDate: new Date(formData.endDate).toISOString(),
         dayOfPayment: parseInt(formData.dayOfPayment),
         walletId: formData.walletId,
         isActive: true,
       };
+
+      console.log(
+        "conf data: ",
+        new Date(formData.startDate).toISOString(),
+        typeof data.startDate
+      );
 
       await createConfig.mutateAsync(data);
 

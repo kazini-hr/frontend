@@ -65,7 +65,7 @@ export function Header() {
           <div className="flex relative z-10 gap-16 justify-between items-center w-full">
             <Link href="/" className="flex gap-2 items-center font-semibold">
               <Image
-                src="/images/kazini-hr-original-colors-removebg-preview.png"
+                src="/images/kazini-hr-original-colors-transparent.png"
                 alt="logo"
                 width={150}
                 height={150}
