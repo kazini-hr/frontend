@@ -789,6 +789,38 @@ export const usePayrollCycleReport = (cycleId: string) => {
   });
 };
 
+// create hook for useDisbursePayroll using this endpoint /api/outsourced/payroll/disburse/{cycle_id}
+export const useDisbursePayroll = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (cycleId: string) => {
+      if (USE_MOCK_DATA) {
+        await delay(2000); // Simulate disbursement time
+        
+        const cycle = mockPayrollCycles.find(c => c.id === cycleId);
+        if (!cycle) {
+          mockApiError('Payroll cycle not found', 404);
+        } else {
+          // Simulate successful disbursement
+          cycle.completed = true;
+          cycle.status = 'DISBURSED';
+        }
+        
+        return mockApiResponse({
+          message: 'Payroll disbursed successfully',
+          cycle
+        });
+      }
+      
+      return api.post(`/api/outsourced/payroll/disburse/${cycleId}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['outsourced', 'payroll'] });
+      queryClient.invalidateQueries({ queryKey: ['outsourced', 'dashboard'] });
+    },
+  });
+};
+
 // Utils for error handling (keep existing)
 export const handleApiError = (error: any): string => {
   if (error.response?.data?.detail) {

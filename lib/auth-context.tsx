@@ -77,8 +77,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    // Skip auth check on authentication pages
+    // Skip auth check on authentication and public website pages
     const isAuthPage =
+      pathname === "/" || // Landing page
       pathname === "/login" ||
       pathname === "/signup" ||
       pathname === "/password-reset";

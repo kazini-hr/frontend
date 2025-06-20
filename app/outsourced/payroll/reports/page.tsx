@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -40,65 +40,30 @@ import {
   Clock,
   AlertCircle,
 } from "lucide-react";
-import { usePayrollCycleReport, usePayrollCycles } from "@/lib/api-hooks";
-
-// Mock data - replace with actual API calls
-const mockPayrollCycles = [
-  {
-    id: "cycle_001",
-    cycleCount: 1,
-    runDate: "2024-01-30",
-    employeeCount: 25,
-    totalGrossPay: 2500000,
-    totalNetPay: 2000000,
-    totalPayeTax: 375000,
-    totalKaziniHRFees: 40000,
-    totalDisbursementAmount: 2040000,
-    hasRun: true,
-    completed: true,
-    status: "COMPLETED",
-  },
-  {
-    id: "cycle_002",
-    cycleCount: 2,
-    runDate: "2024-02-29",
-    employeeCount: 28,
-    totalGrossPay: 2800000,
-    totalNetPay: 2240000,
-    totalPayeTax: 420000,
-    totalKaziniHRFees: 44800,
-    totalDisbursementAmount: 2284800,
-    hasRun: true,
-    completed: false,
-    status: "PROCESSED",
-  },
-  {
-    id: "cycle_003",
-    cycleCount: 3,
-    runDate: "2024-03-30",
-    employeeCount: 30,
-    totalGrossPay: 3000000,
-    totalNetPay: 2400000,
-    totalPayeTax: 450000,
-    totalKaziniHRFees: 48000,
-    totalDisbursementAmount: 2448000,
-    hasRun: false,
-    completed: false,
-    status: "PENDING",
-  },
-];
+import {
+  usePayrollCycleReport,
+  usePayrollCycles,
+  useDisbursePayroll,
+} from "@/lib/api-hooks";
+import api from "@/lib/api";
 
 // Individual Report Modal
 const ReportDetailModal = ({
   isOpen,
   onClose,
   cycle,
+  reportData,
 }: {
   isOpen: boolean;
   onClose: () => void;
   cycle: any;
+  reportData: any;
 }) => {
   const { toast } = useToast();
+  const [isDisburseLoading, setIsDisburseLoading] = useState(false);
+
+  // Initialize the disburse payroll mutation
+  const { mutateAsync: disbursePayroll } = useDisbursePayroll();
 
   const downloadReport = (format: "pdf" | "excel") => {
     toast({
@@ -109,15 +74,43 @@ const ReportDetailModal = ({
     });
   };
 
-  const handleDisburse = () => {
-    toast({
-      title: "Disbursement Initiated",
-      description: "Payments are being processed via SasaPay",
-    });
-    onClose();
+  const handleDisburse = async () => {
+    if (!cycle || !cycle.id) return;
+
+    setIsDisburseLoading(true);
+
+    try {
+      await disbursePayroll(cycle.id);
+
+      toast({
+        title: "Disbursement Successful",
+        description: "Payments have been processed via SasaPay",
+        variant: "default",
+      });
+
+      onClose();
+    } catch (error) {
+      console.error("Disbursement error:", error);
+      toast({
+        title: "Disbursement Failed",
+        description:
+          "There was a problem processing the payments. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsDisburseLoading(false);
+    }
   };
 
   if (!cycle) return null;
+
+  // Use data from the report if available, fallback to mock values
+  const totalGrossPay = reportData?.totalGrossPay || 0;
+  const totalNetPay = reportData?.totalNetPay || 0;
+  const totalPayeTax = reportData?.totalPayeTax || 0;
+  const totalKaziniHRFees = totalNetPay * 0.02; // 2% of net pay as fees
+  const totalDisbursementAmount = totalNetPay + totalKaziniHRFees;
+  const employeeCount = reportData?.employeeCount || 0;
 
   const formatCurrency = (amount: number) =>
     `KES ${amount.toLocaleString("en-KE", { minimumFractionDigits: 0 })}`;
@@ -139,7 +132,7 @@ const ReportDetailModal = ({
             <Card className="text-center">
               <CardContent className="pt-4">
                 <div className="text-2xl font-bold text-blue-600">
-                  {cycle.employeeCount}
+                  {employeeCount}
                 </div>
                 <div className="text-xs text-muted-foreground">Employees</div>
               </CardContent>
@@ -148,7 +141,7 @@ const ReportDetailModal = ({
             <Card className="text-center">
               <CardContent className="pt-4">
                 <div className="text-lg font-bold text-green-600">
-                  {formatCurrency(cycle.totalGrossPay)}
+                  {formatCurrency(totalGrossPay)}
                 </div>
                 <div className="text-xs text-muted-foreground">Gross Pay</div>
               </CardContent>
@@ -157,7 +150,7 @@ const ReportDetailModal = ({
             <Card className="text-center">
               <CardContent className="pt-4">
                 <div className="text-lg font-bold text-red-600">
-                  {formatCurrency(cycle.totalPayeTax)}
+                  {formatCurrency(totalPayeTax)}
                 </div>
                 <div className="text-xs text-muted-foreground">PAYE Tax</div>
               </CardContent>
@@ -166,7 +159,7 @@ const ReportDetailModal = ({
             <Card className="text-center">
               <CardContent className="pt-4">
                 <div className="text-lg font-bold text-purple-600">
-                  {formatCurrency(cycle.totalKaziniHRFees)}
+                  {formatCurrency(totalKaziniHRFees)}
                 </div>
                 <div className="text-xs text-muted-foreground">
                   KaziniHR Fees
@@ -187,7 +180,11 @@ const ReportDetailModal = ({
                     : "outline"
                 }
               >
-                {cycle.status}
+                {cycle.completed
+                  ? "COMPLETED"
+                  : cycle.hasRun
+                  ? "PROCESSED"
+                  : "PENDING"}
               </Badge>
               <span className="text-sm text-muted-foreground">
                 Run Date: {new Date(cycle.runDate).toLocaleDateString()}
@@ -212,8 +209,22 @@ const ReportDetailModal = ({
                 Excel
               </Button>
               {cycle.hasRun && !cycle.completed && (
-                <Button size="sm" onClick={handleDisburse}>
-                  Disburse Now
+                <Button
+                  size="sm"
+                  onClick={handleDisburse}
+                  disabled={isDisburseLoading}
+                >
+                  {isDisburseLoading ? (
+                    <>
+                      <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <TrendingUp className="h-4 w-4 mr-1" />
+                      Disburse Now
+                    </>
+                  )}
                 </Button>
               )}
             </div>
@@ -227,7 +238,7 @@ const ReportDetailModal = ({
                 <TableRow>
                   <TableCell className="font-medium">Total Gross Pay</TableCell>
                   <TableCell className="text-right">
-                    {formatCurrency(cycle.totalGrossPay)}
+                    {formatCurrency(totalGrossPay)}
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -235,7 +246,7 @@ const ReportDetailModal = ({
                     PAYE Tax Deducted
                   </TableCell>
                   <TableCell className="text-right text-red-600">
-                    -{formatCurrency(cycle.totalPayeTax)}
+                    -{formatCurrency(totalPayeTax)}
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -243,7 +254,7 @@ const ReportDetailModal = ({
                     Net Pay to Employees
                   </TableCell>
                   <TableCell className="text-right text-green-600">
-                    {formatCurrency(cycle.totalNetPay)}
+                    {formatCurrency(totalNetPay)}
                   </TableCell>
                 </TableRow>
                 <TableRow>
@@ -251,13 +262,13 @@ const ReportDetailModal = ({
                     KaziniHR Service Fees (2%)
                   </TableCell>
                   <TableCell className="text-right text-purple-600">
-                    {formatCurrency(cycle.totalKaziniHRFees)}
+                    {formatCurrency(totalKaziniHRFees)}
                   </TableCell>
                 </TableRow>
                 <TableRow className="border-t font-bold">
                   <TableCell>Total Disbursement Amount</TableCell>
                   <TableCell className="text-right">
-                    {formatCurrency(cycle.totalDisbursementAmount)}
+                    {formatCurrency(totalDisbursementAmount)}
                   </TableCell>
                 </TableRow>
               </TableBody>
@@ -283,44 +294,186 @@ export default function ReportsPage() {
     startDate: "",
     endDate: "",
   });
+  const [cycleReports, setCycleReports] = useState<Record<string, any>>({});
+  const [loadingReports, setLoadingReports] = useState<Record<string, boolean>>(
+    {}
+  );
+  const [selectedReport, setSelectedReport] = useState<any>(null);
+  const [isInitialLoadComplete, setIsInitialLoadComplete] = useState(false);
 
-  // const { data: payrollCycleReport } = usePayrollCycleReport();
-  const { data: payrollCycles } = usePayrollCycles();
-  // console.log("payrollCycleReport", payrollCycleReport);
-  console.log("payrollCycles", payrollCycles);
+  // Fetch the actual payroll cycles from your API
+  const { data: payrollCycles, isLoading } = usePayrollCycles();
 
-  // Mock loading state - replace with actual API call
-  const [isLoading] = useState(false);
+  // Fetch the report for the selected cycle
+  const { data: payrollCycleReport } = usePayrollCycleReport(selectedCycle?.id);
 
-  const filteredCycles = mockPayrollCycles.filter((cycle) => {
-    const matchesSearch =
-      cycle.cycleCount.toString().includes(searchTerm) ||
-      cycle.status.toLowerCase().includes(searchTerm.toLowerCase());
+  const { toast } = useToast();
 
-    const matchesDateRange =
-      (!dateFilter.startDate || cycle.runDate >= dateFilter.startDate) &&
-      (!dateFilter.endDate || cycle.runDate <= dateFilter.endDate);
+  // Function to fetch report data for a cycle using API
+  const fetchReportForCycle = useCallback(
+    async (cycleId: string) => {
+      if (cycleReports[cycleId]) {
+        // We already have this report data
+        return cycleReports[cycleId];
+      }
 
-    return matchesSearch && matchesDateRange;
-  });
+      setLoadingReports((prev) => ({ ...prev, [cycleId]: true }));
 
-  const handleViewReport = (cycle: any) => {
+      try {
+        // Use the axios api instance instead of fetch
+        const { data } = await api.get(
+          `/api/outsourced/payroll/reports/${cycleId}`
+        );
+
+        setCycleReports((prev) => ({ ...prev, [cycleId]: data }));
+        return data;
+      } catch (error) {
+        console.error("Error fetching report:", error);
+        toast({
+          variant: "destructive",
+          title: "Failed to load report data",
+          description:
+            "There was a problem loading the payroll report details.",
+        });
+        return null;
+      } finally {
+        setLoadingReports((prev) => ({ ...prev, [cycleId]: false }));
+      }
+    },
+    [cycleReports, toast]
+  );
+
+  // Batch fetch reports for all cycles when component loads
+  useEffect(() => {
+    const loadAllCycleReports = async () => {
+      if (!payrollCycles || isInitialLoadComplete) return;
+
+      // Don't try to load if we have no cycles
+      if (payrollCycles.length === 0) {
+        setIsInitialLoadComplete(true);
+        return;
+      }
+
+      try {
+        // Load up to 5 most recent cycles initially to avoid too many simultaneous requests
+        const cyclesToFetch = payrollCycles.slice(0, 5);
+
+        // Set loading states for all cycles
+        const loadingStates: Record<string, boolean> = {};
+        cyclesToFetch.forEach((cycle: any) => {
+          loadingStates[cycle.id] = true;
+        });
+        setLoadingReports((prev) => ({ ...prev, ...loadingStates }));
+
+        // Fetch reports in parallel
+        const reportPromises = cyclesToFetch.map((cycle: any) =>
+          fetchReportForCycle(cycle.id).catch((error) => {
+            console.error(
+              `Error fetching report for cycle ${cycle.id}:`,
+              error
+            );
+            return null;
+          })
+        );
+
+        await Promise.all(reportPromises);
+      } catch (error) {
+        console.error("Error loading initial reports:", error);
+        toast({
+          title: "Warning",
+          description:
+            "Some report data could not be loaded. Details may be incomplete.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsInitialLoadComplete(true);
+      }
+    };
+
+    loadAllCycleReports();
+  }, [payrollCycles, isInitialLoadComplete, fetchReportForCycle, toast]);
+
+  // When report data is received, store it for the selected cycle
+  useEffect(() => {
+    if (selectedCycle && payrollCycleReport) {
+      setCycleReports((prev) => ({
+        ...prev,
+        [selectedCycle.id]: payrollCycleReport,
+      }));
+      setSelectedReport(payrollCycleReport);
+    }
+  }, [payrollCycleReport, selectedCycle]);
+
+  const handleViewReport = async (cycle: any) => {
     setSelectedCycle(cycle);
     setIsDetailModalOpen(true);
+
+    // If we don't have report data yet, fetch it
+    if (!cycleReports[cycle.id]) {
+      await fetchReportForCycle(cycle.id);
+    }
   };
 
+  // Filter payroll cycles based on search and date filters
+  const filteredCycles = payrollCycles
+    ? payrollCycles.filter((cycle: any) => {
+        const matchesSearch =
+          cycle.cycleCount.toString().includes(searchTerm) ||
+          (cycle.completed
+            ? "COMPLETED"
+            : cycle.hasRun
+            ? "PROCESSED"
+            : "PENDING"
+          )
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase());
+
+        const cycleRunDate = new Date(cycle.runDate)
+          .toISOString()
+          .split("T")[0];
+        const matchesDateRange =
+          (!dateFilter.startDate || cycleRunDate >= dateFilter.startDate) &&
+          (!dateFilter.endDate || cycleRunDate <= dateFilter.endDate);
+
+        return matchesSearch && matchesDateRange;
+      })
+    : [];
+
+  console.log("Filtered Cycles:", filteredCycles);
+
+  // Calculate summary statistics
   const getTotalStats = () => {
-    const completed = mockPayrollCycles.filter((c) => c.completed);
+    if (!payrollCycles)
+      return {
+        totalCycles: 0,
+        completedCycles: 0,
+        totalDisbursed: 0,
+        totalEmployees: 0,
+      };
+
+    const completed = payrollCycles.filter((c: any) => c.completed);
+
+    // Calculate totals from available report data
+    let totalDisbursed = 0;
+    let maxEmployees = 0;
+
+    Object.values(cycleReports).forEach((report: any) => {
+      if (report) {
+        const netPay = report.totalNetPay || 0;
+        const fees = netPay * 0.02; // 2% fees
+        totalDisbursed += netPay + fees;
+
+        if (report.employeeCount > maxEmployees) {
+          maxEmployees = report.employeeCount;
+        }
+      }
+    });
+
     return {
-      totalCycles: mockPayrollCycles.length,
+      totalCycles: payrollCycles.length,
       completedCycles: completed.length,
-      totalDisbursed: completed.reduce(
-        (sum, c) => sum + c.totalDisbursementAmount,
-        0
-      ),
-      totalEmployees: Math.max(
-        ...mockPayrollCycles.map((c) => c.employeeCount)
-      ),
+      totalDisbursed,
+      totalEmployees: maxEmployees,
     };
   };
 
@@ -482,7 +635,14 @@ export default function ReportsPage() {
       {/* Reports Table */}
       <Card>
         <CardHeader>
-          <CardTitle>Payroll History</CardTitle>
+          <CardTitle>
+            Payroll History
+            {!isInitialLoadComplete && (
+              <span className="ml-2 text-sm text-muted-foreground">
+                (Loading...)
+              </span>
+            )}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           {filteredCycles.length === 0 ? (
@@ -508,81 +668,103 @@ export default function ReportsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredCycles.map((cycle) => (
-                  <TableRow key={cycle.id}>
-                    <TableCell className="font-medium">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-muted-foreground" />#
-                        {cycle.cycleCount}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {new Date(cycle.runDate).toLocaleDateString("en-KE", {
-                        year: "numeric",
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Users className="h-4 w-4 text-muted-foreground" />
-                        {cycle.employeeCount}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right font-medium">
-                      {formatCurrency(cycle.totalDisbursementAmount)}
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          cycle.completed
-                            ? "default"
-                            : cycle.hasRun
-                            ? "secondary"
-                            : "outline"
-                        }
-                        className={
-                          cycle.completed
-                            ? "bg-green-100 text-green-800 border-green-200"
-                            : cycle.hasRun
-                            ? "bg-yellow-100 text-yellow-800 border-yellow-200"
-                            : "bg-gray-100 text-gray-800 border-gray-200"
-                        }
-                      >
-                        {cycle.completed && (
-                          <CheckCircle className="h-3 w-3 mr-1" />
+                {filteredCycles.map((cycle: any) => {
+                  // Get report data if available
+                  const report = cycleReports[cycle.id];
+                  const isLoading = loadingReports[cycle.id];
+                  const employeeCount = report ? report.employeeCount : 0;
+                  const netPay = report ? report.totalNetPay : 0;
+                  const fees = netPay * 0.02; // 2% fees
+                  const totalAmount = netPay + fees;
+
+                  return (
+                    <TableRow key={cycle.id}>
+                      <TableCell className="font-medium">
+                        <div className="flex items-center gap-2">
+                          <Calendar className="h-4 w-4 text-muted-foreground" />
+                          #{cycle.cycleCount}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        {new Date(cycle.runDate).toLocaleDateString("en-KE", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                        })}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Users className="h-4 w-4 text-muted-foreground" />
+                          {isLoading ? (
+                            <Skeleton className="h-4 w-8" />
+                          ) : (
+                            employeeCount
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-right font-medium">
+                        {isLoading ? (
+                          <Skeleton className="h-4 w-20 ml-auto" />
+                        ) : (
+                          formatCurrency(totalAmount)
                         )}
-                        {cycle.hasRun && !cycle.completed && (
-                          <Clock className="h-3 w-3 mr-1" />
-                        )}
-                        {!cycle.hasRun && (
-                          <AlertCircle className="h-3 w-3 mr-1" />
-                        )}
-                        {cycle.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex gap-1">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleViewReport(cycle)}
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          variant={
+                            cycle.completed
+                              ? "default"
+                              : cycle.hasRun
+                              ? "secondary"
+                              : "outline"
+                          }
+                          className={
+                            cycle.completed
+                              ? "bg-green-100 text-green-800 border-green-200"
+                              : cycle.hasRun
+                              ? "bg-yellow-100 text-yellow-800 border-yellow-200"
+                              : "bg-gray-100 text-gray-800 border-gray-200"
+                          }
                         >
-                          <Eye className="h-3 w-3" />
-                        </Button>
-                        {cycle.hasRun && !cycle.completed && (
+                          {cycle.completed && (
+                            <CheckCircle className="h-3 w-3 mr-1" />
+                          )}
+                          {cycle.hasRun && !cycle.completed && (
+                            <Clock className="h-3 w-3 mr-1" />
+                          )}
+                          {!cycle.hasRun && (
+                            <AlertCircle className="h-3 w-3 mr-1" />
+                          )}
+                          {cycle.completed
+                            ? "COMPLETED"
+                            : cycle.hasRun
+                            ? "PROCESSED"
+                            : "PENDING"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex gap-1">
                           <Button
                             size="sm"
+                            variant="outline"
                             onClick={() => handleViewReport(cycle)}
-                            className="bg-blue-600 hover:bg-blue-700"
                           >
-                            <TrendingUp className="h-3 w-3" />
+                            <Eye className="h-3 w-3" />
                           </Button>
-                        )}
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                          {cycle.hasRun && !cycle.completed && (
+                            <Button
+                              size="sm"
+                              onClick={() => handleViewReport(cycle)}
+                              className="bg-blue-600 hover:bg-blue-700"
+                            >
+                              <TrendingUp className="h-3 w-3" />
+                            </Button>
+                          )}
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           )}
@@ -590,12 +772,12 @@ export default function ReportsPage() {
       </Card>
 
       {/* Quick Actions */}
-      {filteredCycles.some((c) => c.hasRun && !c.completed) && (
+      {filteredCycles.some((c: any) => c.hasRun && !c.completed) && (
         <Alert className="border-blue-200 bg-blue-50">
           <TrendingUp className="h-4 w-4" />
           <AlertDescription>
             You have{" "}
-            {filteredCycles.filter((c) => c.hasRun && !c.completed).length}{" "}
+            {filteredCycles.filter((c: any) => c.hasRun && !c.completed).length}{" "}
             processed payroll cycle(s) awaiting disbursement.
           </AlertDescription>
         </Alert>
@@ -606,6 +788,7 @@ export default function ReportsPage() {
         isOpen={isDetailModalOpen}
         onClose={() => setIsDetailModalOpen(false)}
         cycle={selectedCycle}
+        reportData={selectedCycle ? cycleReports[selectedCycle.id] : null}
       />
     </div>
   );
