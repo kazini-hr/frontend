@@ -1,6 +1,6 @@
 export default function BeforeAfter({ config }: { config?: any }) {
   return (
-    <section>
+    <section id="features">
       <div className="mx-auto max-w-5xl px-8 py-16 md:py-24">
         {/* <ProblemsTitle /> */}
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">

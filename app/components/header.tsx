@@ -81,6 +81,14 @@ export function Header() {
               >
                 Book A Demo
               </Button>
+              <Button
+                href={externalLinks.login}
+                rel="noopener noreferrer"
+                target="_blank"
+                color="yellow_dark"
+              >
+                Login
+              </Button>
             </div>
           </div>
           <div className="flex gap-6 items-center">
@@ -133,10 +141,12 @@ export function Header() {
                             <MobileNavLink href="/blog">Blog</MobileNavLink> */}
                           </div>
                           <div className="flex flex-col gap-4 mt-8">
-                            <Button href="/" outline>
+                            <Button href={externalLinks.login} outline>
                               Log in
                             </Button>
-                            <Button href="#">Get Started</Button>
+                            <Button href={externalLinks.calendlyCEO}>
+                              Get Started
+                            </Button>
                           </div>
                         </PopoverPanel>
                       </>

@@ -1,9 +1,47 @@
-'use client';
+"use client";
 
-import { useRef, useState } from 'react';
-import Link from 'next/link';
-import { AnimatePresence, motion } from 'framer-motion';
-import { usePathname } from 'next/navigation';
+import { useRef, useState } from "react";
+import Link from "next/link";
+import { AnimatePresence, motion } from "framer-motion";
+import { usePathname } from "next/navigation";
+
+// Helper function to handle smooth scrolling
+const scrollToElement = (
+  e: React.MouseEvent<HTMLAnchorElement>,
+  href: string
+) => {
+  // Only handle hash links
+  if (href.startsWith("#")) {
+    e.preventDefault();
+    const targetId = href.substring(1);
+    const element = document.getElementById(targetId);
+
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+
+      // Update URL without refreshing the page
+      window.history.pushState(null, "", href);
+    }
+  } else if (href.includes("#")) {
+    // For links like "/#features"
+    e.preventDefault();
+    const targetId = href.split("#")[1];
+    const element = document.getElementById(targetId);
+
+    if (element) {
+      element.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+
+      // Update URL without refreshing the page
+      window.history.pushState(null, "", href);
+    }
+  }
+};
 
 export function NavLinks() {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -11,8 +49,8 @@ export function NavLinks() {
   const pathname = usePathname();
 
   return [
-    ['Features', '/#features'],
-    ['Pricing', '/#pricing'],
+    ["Features", "/#features"],
+    // ['Pricing', '/#pricing'],
     // ["FAQs", "/#faq"],
     // ["Blog", "/blog"],
   ].map(([label, href], index) => (
@@ -20,9 +58,9 @@ export function NavLinks() {
       key={label}
       href={href}
       className={`relative px-3 py-2 -mx-3 -my-2 text-sm rounded-lg transition-colors delay-150 ${
-        href === '/blog' && pathname.startsWith('/blog')
-          ? 'bg-gray-100 text-foreground'
-          : 'text-secondary-foreground hover:text-foreground hover:delay-0'
+        href === "/blog" && pathname.startsWith("/blog")
+          ? "bg-gray-100 text-foreground"
+          : "text-secondary-foreground hover:text-foreground hover:delay-0"
       }`}
       onMouseEnter={() => {
         if (timeoutRef.current) {
@@ -35,6 +73,7 @@ export function NavLinks() {
           setHoveredIndex(null);
         }, 200);
       }}
+      onClick={(e) => scrollToElement(e, href)}
     >
       <AnimatePresence>
         {hoveredIndex === index && (
