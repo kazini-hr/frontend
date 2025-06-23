@@ -34,6 +34,7 @@ export function PasswordResetForm({
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
+    // @ts-ignore
     resolver: zodResolver(formSchema),
   });
 

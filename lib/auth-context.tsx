@@ -82,7 +82,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       pathname === "/" || // Landing page
       pathname === "/login" ||
       pathname === "/signup" ||
-      pathname === "/password-reset";
+      pathname === "/forgot-password" ||
+      pathname === "/change-password";
 
     if (!isAuthPage) {
       checkAuth();

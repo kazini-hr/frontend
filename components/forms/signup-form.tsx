@@ -127,6 +127,7 @@ export function SignupForm({
 
   // Initialize form
   const form = useForm<SignupFormValues>({
+    // @ts-ignore
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
       company_name: "",
@@ -152,7 +153,7 @@ export function SignupForm({
         ).toISOString(),
       });
 
-      setCompanyUniqueId(response.company_unique_id);
+      setCompanyUniqueId(response?.company?.uniqueId);
       setRegistrationSuccess(true);
       toast.success("Company registered successfully!");
     } catch (error: any) {

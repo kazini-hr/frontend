@@ -40,6 +40,7 @@ export function PasswordChangeForm({
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const form = useForm<PasswordChangeFormValues>({
+    // @ts-ignore
     resolver: zodResolver(passwordChangeSchema),
     defaultValues: {
       oldPassword: "",

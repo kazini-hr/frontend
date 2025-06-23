@@ -66,6 +66,9 @@ const verify2FA = async (data: Verify2FARequest): Promise<Verify2FAResponse> => 
 
 const logout = async (): Promise<void> => {
   await api.post('/api/auth/logout');
+  // Import and use the client-side cookie clearing function
+  const { clearAuthCookiesClient } = require('./auth-utils');
+  clearAuthCookiesClient();
 };
 
 // Authentication hooks

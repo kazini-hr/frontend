@@ -1,18 +1,4 @@
 {
-  "app/components/form-modal.tsx -> ./forms/student-form": {
-    "id": 27671,
-    "files": [
-      "static/chunks/3193-99e0f3691217514c.js",
-      "static/chunks/7671.28333bb6976b9904.js"
-    ]
-  },
-  "app/components/form-modal.tsx -> ./forms/teacher-form": {
-    "id": 53270,
-    "files": [
-      "static/chunks/3193-99e0f3691217514c.js",
-      "static/chunks/3270.3776545cd4aa359b.js"
-    ]
-  },
   "node_modules/.pnpm/@tanstack+query-devtools@5.80.0/node_modules/@tanstack/query-devtools/build/index.js -> ./DevtoolsComponent/I3HPI4QX.js": {
     "id": null,
     "files": []

@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -17,9 +17,20 @@ import {
   Menu,
   X,
   ChevronRight,
+  LogOut,
+  User,
 } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useLogout } from "@/lib/api-hooks";
 
 interface NavItem {
   title: string;
@@ -260,6 +271,50 @@ const DesktopSidebar = ({ pathname }: { pathname: string }) => {
   );
 };
 
+// Profile Dropdown Component
+const ProfileDropdown = () => {
+  const router = useRouter();
+  const { mutate: logout, isPending } = useLogout();
+
+  const handleLogout = () => {
+    logout(undefined, {
+      onSuccess: () => {
+        router.push("/login");
+      },
+    });
+  };
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="relative h-9 w-9 rounded-full">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full">
+            <User size={18} />
+          </div>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href="/outsourced/profile" className="w-full cursor-pointer">
+            <User className="mr-2 h-4 w-4" />
+            Profile
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={handleLogout}
+          disabled={isPending}
+          className="text-red-500 cursor-pointer focus:text-red-500"
+        >
+          <LogOut className="mr-2 h-4 w-4" />
+          {isPending ? "Logging out..." : "Logout"}
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+};
+
 export default function OutsourcedLayout({
   children,
 }: {
@@ -304,12 +359,16 @@ export default function OutsourcedLayout({
                 <p className="text-xs text-gray-500">Outsourced Payroll</p>
               </div>
             </div>
+            <ProfileDropdown />
           </div>
         </header>
 
         {/* Desktop Header with Breadcrumb */}
         <header className="hidden lg:block sticky top-0 z-30 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 border-b border-gray-200 px-6 py-4 shadow-sm">
-          <Breadcrumb pathname={pathname} />
+          <div className="flex items-center justify-between">
+            <Breadcrumb pathname={pathname} />
+            <ProfileDropdown />
+          </div>
         </header>
 
         {/* Page Content */}
