@@ -150,6 +150,9 @@ export interface RegisterCompanyResponse {
   message: string;
   company_unique_id: string;
   admin_email: string;
+  company: {
+    uniqueId: string;
+  }
 }
 
 export interface LoginRequest {

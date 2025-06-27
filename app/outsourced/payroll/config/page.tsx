@@ -60,12 +60,6 @@ const PayrollConfigurationForm = ({
   const createConfig = useCreatePayrollConfig();
   const { toast } = useToast();
 
-  // Mock wallet options - in real app, fetch from wallets API
-  const availableWallets = [
-    { id: "wallet_1", name: "Primary Payroll Wallet", balance: "KES 250,000" },
-    { id: "wallet_2", name: "Secondary Wallet", balance: "KES 100,000" },
-  ];
-
   const { data: wallets } = useWallet();
 
   console.log("Wallets:", wallets);
@@ -79,7 +73,7 @@ const PayrollConfigurationForm = ({
         startDate: new Date(formData.startDate).toISOString(),
         endDate: new Date(formData.endDate).toISOString(),
         dayOfPayment: parseInt(formData.dayOfPayment),
-        walletId: formData.walletId,
+        walletId: formData.walletId ?? "",
         isActive: true,
       };
 
@@ -239,46 +233,6 @@ const PayrollConfigurationForm = ({
               </AlertDescription>
             </Alert>
           )}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Wallet className="h-5 w-5" />
-            Wallet Configuration
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="walletId">Source Wallet</Label>
-            <Select
-              value={formData.walletId}
-              onValueChange={(value) =>
-                setFormData((prev) => ({ ...prev, walletId: value }))
-              }
-              required
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Select a wallet" />
-              </SelectTrigger>
-              <SelectContent>
-                {availableWallets.map((wallet) => (
-                  <SelectItem key={wallet.id} value={wallet.id}>
-                    <div className="flex flex-col">
-                      <span>{wallet.name}</span>
-                      <span className="text-xs text-muted-foreground">
-                        {wallet.balance}
-                      </span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <p className="text-xs text-muted-foreground">
-              Payroll funds will be deducted from this wallet
-            </p>
-          </div>
         </CardContent>
       </Card>
 

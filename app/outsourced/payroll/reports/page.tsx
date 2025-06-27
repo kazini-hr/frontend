@@ -109,9 +109,9 @@ const ReportDetailModal = ({
   const totalNetPay = reportData?.totalNetPay || 0;
   const totalPayeTax = reportData?.totalPayeTax || 0;
   const totalKaziniHRFees = totalNetPay * 0.02; // 2% of net pay as fees
-  const totalDisbursementAmount = totalNetPay + totalKaziniHRFees;
+  const totalTransactionFees = 100; // Fixed transaction fee per cycle
+  const totalDisbursementAmount = totalNetPay + totalTransactionFees;
   const employeeCount = reportData?.employeeCount || 0;
-
   const formatCurrency = (amount: number) =>
     `KES ${amount.toLocaleString("en-KE", { minimumFractionDigits: 0 })}`;
 
@@ -159,10 +159,10 @@ const ReportDetailModal = ({
             <Card className="text-center">
               <CardContent className="pt-4">
                 <div className="text-lg font-bold text-purple-600">
-                  {formatCurrency(totalKaziniHRFees)}
+                  {formatCurrency(totalTransactionFees)}
                 </div>
                 <div className="text-xs text-muted-foreground">
-                  KaziniHR Fees
+                  Transaction Fees
                 </div>
               </CardContent>
             </Card>
@@ -259,10 +259,10 @@ const ReportDetailModal = ({
                 </TableRow>
                 <TableRow>
                   <TableCell className="font-medium">
-                    KaziniHR Service Fees (2%)
+                    Transaction Fees (KES 100 per transaction)
                   </TableCell>
                   <TableCell className="text-right text-purple-600">
-                    {formatCurrency(totalKaziniHRFees)}
+                    {formatCurrency(totalTransactionFees)}
                   </TableCell>
                 </TableRow>
                 <TableRow className="border-t font-bold">
@@ -461,7 +461,8 @@ export default function ReportsPage() {
       if (report) {
         const netPay = report.totalNetPay || 0;
         const fees = netPay * 0.02; // 2% fees
-        totalDisbursed += netPay + fees;
+        const transactionFees = 100; // Fixed transaction fee
+        totalDisbursed += netPay + transactionFees;
 
         if (report.employeeCount > maxEmployees) {
           maxEmployees = report.employeeCount;
@@ -675,7 +676,8 @@ export default function ReportsPage() {
                   const employeeCount = report ? report.employeeCount : 0;
                   const netPay = report ? report.totalNetPay : 0;
                   const fees = netPay * 0.02; // 2% fees
-                  const totalAmount = netPay + fees;
+                  const transactionFees = 100; // Fixed transaction fee
+                  const totalAmount = netPay + transactionFees;
 
                   return (
                     <TableRow key={cycle.id}>

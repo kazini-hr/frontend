@@ -88,10 +88,16 @@ const ProcessPayrollModal = ({
                     KES {summary.totalNetPay.toLocaleString()}
                   </span>
                 </div>
-                <div className="flex justify-between">
+                {/* <div className="flex justify-between">
                   <span className="font-medium">KaziniHR Fees (2%):</span>
                   <span className="text-blue-600">
                     KES {summary.totalKaziniHRFees.toLocaleString()}
+                  </span>
+                </div> */}
+                <div className="flex justify-between">
+                  <span className="font-medium">Transaction Fees:</span>
+                  <span className="text-blue-600">
+                    KES {summary.totalTransactionFees.toLocaleString()}
                   </span>
                 </div>
                 <div className="border-t pt-2 flex justify-between font-bold">
@@ -310,7 +316,7 @@ export default function PayrollSummaryPage() {
       </div>
 
       {/* KaziniHR Fee Information */}
-      <Alert className="border-blue-200 bg-blue-50">
+      {/* <Alert className="border-blue-200 bg-blue-50">
         <Building2 className="h-4 w-4" />
         <AlertDescription>
           <div className="space-y-2">
@@ -339,7 +345,7 @@ export default function PayrollSummaryPage() {
             </div>
           </div>
         </AlertDescription>
-      </Alert>
+      </Alert> */}
 
       {/* Employee Breakdown Table */}
       <Card>
