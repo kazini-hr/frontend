@@ -32,85 +32,38 @@ import { CalendarIcon } from "lucide-react";
 import { Calendar } from "../ui/calendar";
 
 // Country options (you can expand this list)
-const COUNTRIES = [
-  "AFGHANISTAN",
-  "ALBANIA",
-  "ALGERIA",
-  "ARGENTINA",
-  "AUSTRALIA",
-  "AUSTRIA",
-  "BANGLADESH",
-  "BELGIUM",
-  "BRAZIL",
-  "CANADA",
-  "CHINA",
-  "COLOMBIA",
-  "DENMARK",
-  "EGYPT",
-  "FINLAND",
-  "FRANCE",
-  "GERMANY",
-  "GHANA",
-  "GREECE",
-  "INDIA",
-  "INDONESIA",
-  "IRAN",
-  "IRAQ",
-  "IRELAND",
-  "ISRAEL",
-  "ITALY",
-  "JAPAN",
-  "JORDAN",
-  "KENYA",
-  "KOREA",
-  "LEBANON",
-  "MALAYSIA",
-  "MEXICO",
-  "MOROCCO",
-  "NETHERLANDS",
-  "NEW_ZEALAND",
-  "NIGERIA",
-  "NORWAY",
-  "PAKISTAN",
-  "PERU",
-  "PHILIPPINES",
-  "POLAND",
-  "PORTUGAL",
-  "ROMANIA",
-  "RUSSIA",
-  "SAUDI_ARABIA",
-  "SINGAPORE",
-  "SOUTH_AFRICA",
-  "SPAIN",
-  "SRI_LANKA",
-  "SWEDEN",
-  "SWITZERLAND",
-  "THAILAND",
-  "TURKEY",
-  "UGANDA",
-  "UKRAINE",
-  "UNITED_ARAB_EMIRATES",
-  "UNITED_KINGDOM",
-  "UNITED_STATES",
-  "VENEZUELA",
-  "VIETNAM",
-  "ZIMBABWE",
-];
+const COUNTRIES = ["KENYA"];
 
 // Define form schema with Zod
 const signupFormSchema = z.object({
   company_name: z.string().min(2, "Company name must be at least 2 characters"),
-  company_alias: z
-    .string()
-    .min(2, "Company alias must be at least 2 characters"),
+  company_email: z.string().email("Please enter a valid company email"),
   country_of_incorporation: z.string().min(1, "Please select a country"),
   company_pin: z.string().min(1, "Company PIN/Tax ID is required"),
   date_of_incorporation: z.string().min(1, "Date of incorporation is required"),
-  company_email: z.string().email("Please enter a valid company email"),
   employee_count: z.coerce.number().min(1, "Employee count must be at least 1"),
+
   admin_email: z.string().email("Please enter a valid admin email"),
-  admin_username: z.string().min(3, "Username must be at least 3 characters"),
-  admin_phone: z.string().min(6, "Phone number must be at least 6 characters"),
+  admin_first_name: z
+    .string()
+    .min(2, "First name must be at least 2 characters")
+    .max(30, "First name must be at most 30 characters"),
+  admin_last_name: z
+    .string()
+    .min(2, "Last name must be at least 2 characters")
+    .max(30, "Last name must be at most 30 characters"),
+  admin_middle_name: z
+    .string()
+    .min(2, "Middle name must be at least 2 characters")
+    .max(30, "Middle name must be at most 30 characters")
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
+  admin_phone: z
+    .string()
+    .min(6, "Phone number must be at least 6 characters")
+    .max(18, "Phone number must be at most 18 characters")
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
 });
 
 type SignupFormValues = z.infer<typeof signupFormSchema>;
@@ -131,14 +84,16 @@ export function SignupForm({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
       company_name: "",
-      company_alias: "",
+      company_email: "",
       country_of_incorporation: "",
       company_pin: "",
       date_of_incorporation: "",
-      company_email: "",
-      employee_count: 1,
+      employee_count: 10,
+
       admin_email: "",
-      admin_username: "",
+      admin_first_name: "",
+      admin_last_name: "",
+      admin_middle_name: "",
       admin_phone: "",
     },
   });
@@ -162,11 +117,9 @@ export function SignupForm({
     }
   };
 
-  const goToLogin = () => {
-    router.push("/login");
-  };
+  const goToLogin = () => router.push("/login");
 
-  if (registrationSuccess) {
+  if (registrationSuccess || true) {
     return (
       <div className={cn("flex flex-col gap-6", className)} {...props}>
         <Toaster richColors />
@@ -194,21 +147,6 @@ export function SignupForm({
                 </h1>
                 <p className="text-balance text-kaziniMuted">
                   Your company has been registered successfully
-                </p>
-              </div>
-
-              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                <h3 className="font-semibold text-kaziniBlue mb-2">
-                  Important: Save Your Company ID
-                </h3>
-                <div className="bg-white p-3 rounded border">
-                  <code className="text-lg font-mono font-bold text-blue-600">
-                    {companyUniqueId}
-                  </code>
-                </div>
-                <p className="text-sm text-kaziniMuted mt-2">
-                  You will need this Company ID to log in. Please save it in a
-                  secure place.
                 </p>
               </div>
 
@@ -256,7 +194,7 @@ export function SignupForm({
                     Company Information
                   </h3>
 
-                  <div className="grid gap-4 md:grid-cols-2">
+                  <div className="grid gap-4">
                     <FormField
                       control={form.control}
                       name="company_name"
@@ -265,19 +203,6 @@ export function SignupForm({
                           <FormLabel>Company Name</FormLabel>
                           <FormControl>
                             <Input placeholder="Acme Corporation" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="company_alias"
-                      render={({ field }) => (
-                        <FormItem className="grid gap-2 text-kaziniBlue">
-                          <FormLabel>Company Alias</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Acme Corp" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -414,6 +339,7 @@ export function SignupForm({
                               type="number"
                               min="1"
                               placeholder="10"
+                              defaultValue={10}
                               {...field}
                             />
                           </FormControl>
@@ -451,12 +377,38 @@ export function SignupForm({
                   <div className="grid gap-4 md:grid-cols-2">
                     <FormField
                       control={form.control}
-                      name="admin_username"
+                      name="admin_first_name"
                       render={({ field }) => (
                         <FormItem className="grid gap-2 text-kaziniBlue">
-                          <FormLabel>Admin Username</FormLabel>
+                          <FormLabel>Admin First Name</FormLabel>
                           <FormControl>
-                            <Input placeholder="admin" {...field} />
+                            <Input placeholder="John" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="admin_last_name"
+                      render={({ field }) => (
+                        <FormItem className="grid gap-2 text-kaziniBlue">
+                          <FormLabel>Admin Last Name</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Smith" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="admin_middle_name"
+                      render={({ field }) => (
+                        <FormItem className="grid gap-2 text-kaziniBlue">
+                          <FormLabel>Admin Middle Name (optional)</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Michael" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -467,7 +419,7 @@ export function SignupForm({
                       name="admin_phone"
                       render={({ field }) => (
                         <FormItem className="grid gap-2 text-kaziniBlue">
-                          <FormLabel>Admin Phone</FormLabel>
+                          <FormLabel>Admin Phone (optional)</FormLabel>
                           <FormControl>
                             <Input
                               type="tel"

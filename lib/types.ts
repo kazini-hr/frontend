@@ -54,7 +54,6 @@ export interface Wallet {
   narrative: string;
   createdAt: string;
   updatedAt: string;
-
 }
 
 export interface WalletBalance {
@@ -71,7 +70,7 @@ export interface WalletBalance {
 
 export interface WalletTransaction {
   id: string;
-  transactionType: 'CREDIT' | 'DEBIT';
+  transactionType: "CREDIT" | "DEBIT";
   amount: number;
   reference: string;
   paymentStatus: string;
@@ -135,15 +134,17 @@ export interface OutsourcedWalletFundResponse {
 
 export interface RegisterCompanyRequest {
   company_name: string;
-  company_alias: string;
+  company_email: string;
   country_of_incorporation: string;
   company_pin: string;
   date_of_incorporation: string;
-  company_email: string;
   employee_count: number;
+
   admin_email: string;
-  admin_username: string;
-  admin_phone: string;
+  admin_first_name: string;
+  admin_last_name: string;
+  admin_middle_name?: string;
+  admin_phone?: string;
 }
 
 export interface RegisterCompanyResponse {
@@ -152,7 +153,7 @@ export interface RegisterCompanyResponse {
   admin_email: string;
   company: {
     uniqueId: string;
-  }
+  };
 }
 
 export interface LoginRequest {
