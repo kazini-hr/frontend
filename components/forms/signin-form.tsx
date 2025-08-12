@@ -78,7 +78,7 @@ export function LoginForm({
   // Redirect authenticated users away from login page
   useEffect(() => {
     if (isAuthenticated) {
-      router.push("/outsourced/dashboard");
+      router.push("/dashboard");
     }
   }, [isAuthenticated, router]);
 

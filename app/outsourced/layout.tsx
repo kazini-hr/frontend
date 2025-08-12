@@ -19,6 +19,7 @@ import {
   ChevronRight,
   LogOut,
   User,
+  Clock,
 } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
@@ -76,6 +77,12 @@ const navigation: NavItem[] = [
     href: "/outsourced/payroll/reports",
     icon: <FileText className="h-4 w-4" />,
     description: "View payroll history",
+  },
+  {
+    title: "Timesheets",
+    href: "/outsourced/timesheets",
+    icon: <Clock className="h-4 w-4" />,
+    description: "Manage time entries",
   },
 ];
 
