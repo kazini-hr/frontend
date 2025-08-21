@@ -45,8 +45,8 @@ export const navigation: NavGroup[] = [
         title: "Employees",
         href: COMPANY_ROUTES.EMPLOYEES,
       },
-      { title: "Timesheets", href: COMPANY_ROUTES.TIMESHEETS },
       { title: "Locations", href: COMPANY_ROUTES.LOCATIONS },
+      { title: "Timesheets", href: COMPANY_ROUTES.TIMESHEETS },
     ],
   },
 ];

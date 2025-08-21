@@ -86,7 +86,7 @@ const CompanyDetailsView = ({
 };
 
 export default function CompanyDetails() {
-  const { getCompany, updateCompany } = useCompany();
+  const { getCompany } = useCompany();
   const { data, isPending, error } = getCompany;
   const [isEditing, setIsEditing] = useState(false);
 

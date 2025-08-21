@@ -207,3 +207,20 @@ export interface Company {
   date_of_incorporation: string;
   company_email: string;
 }
+
+export interface CreateCompanyLocation {
+  name: string;
+  description?: string;
+}
+export interface CompanyLocation {
+  id: string;
+  name: string;
+  description: string;
+  companyId: string;
+}
+
+export interface UpdateCompanyLocation {
+  id: string;
+  name: string;
+  description?: string;
+}

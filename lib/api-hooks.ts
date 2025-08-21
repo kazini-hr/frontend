@@ -33,6 +33,9 @@ import type {
   Verify2FARequest,
   Verify2FAResponse,
   Company,
+  CompanyLocation,
+  UpdateCompanyLocation,
+  CreateCompanyLocation,
 } from "./types";
 
 // Environment flag to toggle between mock and real API
@@ -959,6 +962,60 @@ export function useCompany() {
   return {
     getCompany,
     updateCompany,
+  };
+}
+
+export function useCompanyLocations(companyId: string) {
+  const queryClient = useQueryClient();
+
+  const addCompanyLocation = useMutation({
+    mutationFn: async (location: CreateCompanyLocation) => {
+      const res = await api.post(
+        "/api/companies/" + companyId + "/locations",
+        location
+      );
+      return res.data.data as CompanyLocation;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["company", companyId, "locations"],
+      });
+    },
+    onError: (error) => {
+      console.error("Error adding company location:", error);
+    },
+  });
+
+  const updateCompanyLocation = useMutation({
+    mutationFn: async (location: UpdateCompanyLocation) => {
+      const res = await api.put(
+        "/api/companies/" + companyId + "/locations/" + location.id,
+        location
+      );
+      return res.data.data as CompanyLocation;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["company", companyId, "locations"],
+      });
+    },
+    onError: (error) => {
+      console.error("Error updating company location:", error);
+    },
+  });
+
+  const getCompanyLocations = useQuery<CompanyLocation[]>({
+    queryKey: ["company", companyId, "locations"],
+    queryFn: () =>
+      api
+        .get("/api/companies/" + companyId + "/locations")
+        .then((res) => res.data.data),
+  });
+
+  return {
+    getCompanyLocations,
+    addCompanyLocation,
+    updateCompanyLocation,
   };
 }
 
