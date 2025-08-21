@@ -10,7 +10,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, CircleUserRound } from "lucide-react";
+
+import { User, LogOut, CircleUserRound } from "lucide-react";
 import Link from "next/link";
 
 const ProfileDropdown = () => {
@@ -28,14 +29,16 @@ const ProfileDropdown = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <CircleUserRound size={28} className="cursor-pointer" />
+        <div className="flex h-9 w-9 items-center justify-center rounded-full cursor-pointer">
+          <CircleUserRound size={28} strokeWidth={1.25} />
+        </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/outsourced/profile" className="w-full cursor-pointer">
-            <CircleUserRound className="mr-2 h-4 w-4" />
+            <User className="mr-2 h-4 w-4" />
             Profile
           </Link>
         </DropdownMenuItem>

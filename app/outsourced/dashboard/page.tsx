@@ -15,7 +15,7 @@ import {
   TrendingUp,
   Activity,
 } from "lucide-react";
-import { useAuth, withAuth } from "@/lib/auth-context";
+import { useAuth } from "@/lib/auth-context";
 import { useEffect } from "react";
 
 interface DashboardCardProps {

@@ -198,3 +198,12 @@ export interface Verify2FAResponse {
   message: string;
   setup_complete: boolean;
 }
+
+export interface Company {
+  id: string;
+  name: string;
+  company_pin: string;
+  country_of_incorporation: string;
+  date_of_incorporation: string;
+  company_email: string;
+}

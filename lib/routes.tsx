@@ -14,6 +14,7 @@ export const COMPANY_ROUTES = {
   LOCATIONS: "/company/locations",
   EMPLOYEES: "/company/employees",
   TIMESHEETS: "/company/timesheets",
+  DETAILS: "/company/details",
 };
 
 export type NavItem = {
@@ -39,6 +40,7 @@ export const navigation: NavGroup[] = [
   {
     title: "Company",
     items: [
+      { title: "Details", href: COMPANY_ROUTES.DETAILS },
       {
         title: "Employees",
         href: COMPANY_ROUTES.EMPLOYEES,

@@ -32,6 +32,7 @@ import type {
   Setup2FAResponse,
   Verify2FARequest,
   Verify2FAResponse,
+  Company,
 } from "./types";
 
 // Environment flag to toggle between mock and real API
@@ -930,6 +931,34 @@ export function useTimesheetOperations() {
     // createTimesheet,
     // updateTimesheet,
     getTimesheets,
+  };
+}
+
+export function useCompany() {
+  const queryClient = useQueryClient();
+
+  const getCompany = useQuery<Company>({
+    queryKey: ["company"],
+    queryFn: () => api.get("/api/companies").then((res) => res.data.data),
+  });
+
+  const updateCompany = useMutation({
+    mutationFn: async (updatedCompany: Company) => {
+      const { id, ...data } = updatedCompany;
+      const res = await api.put("/api/companies/" + id, data);
+      return res.data.data as Company;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["company"] });
+    },
+    onError: (error) => {
+      console.error("Error updating company:", error);
+    },
+  });
+
+  return {
+    getCompany,
+    updateCompany,
   };
 }
 

@@ -12,12 +12,12 @@ export default function PageViewLayout({
   children,
 }: DashboardHeaderProps) {
   return (
-    <div className="container mx-auto py-6 px-4 space-y-6">
-      <div className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
+    <div className="container mx-auto py-4 px-4 space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
         {description && <p className="text-muted-foreground">{description}</p>}
       </div>
-      {children}
+      <div>{children}</div>
     </div>
   );
 }

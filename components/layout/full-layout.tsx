@@ -13,6 +13,7 @@ import { navigation } from "@/lib/routes";
 import { ChevronRight } from "lucide-react";
 import React from "react";
 import ProfileDropdown from "./profile-dropdown";
+import { Toaster } from "sonner";
 
 interface FullLayoutProps {
   title: string;
@@ -72,6 +73,7 @@ export default function FullLayout({
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <Toaster richColors />
       <DesktopSidebar pathname={"dashboard"} />
       <MobileNav
         isOpen={isMobileNavOpen}
@@ -80,6 +82,7 @@ export default function FullLayout({
       />
 
       <div className={"lg:pl-64"}>
+        {/* Mobile Header */}
         <header className="lg:hidden sticky top-0 z-40 bg-white border-b border-gray-200 px-4 py-3 shadow-sm">
           <div className="flex items-center justify-between">
             <Button

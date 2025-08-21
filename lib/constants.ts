@@ -1,0 +1,6 @@
+export const COUNTRIES = {
+  KENYA: "KENYA",
+  TANZANIA: "TANZANIA",
+  UGANDA: "UGANDA",
+  RWANDA: "RWANDA",
+};
