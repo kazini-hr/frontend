@@ -4,12 +4,47 @@ export const MAIN_ROUTES = {
 
 export const OUTSOURCED_ROUTES = {
   DASHBOARD: "/outsourced/dashboard",
+  EMPLOYEES: "/outsourced/employees",
+  WALLET: "/outsourced/wallet",
+  PAYROLL: "/outsourced/payroll",
 };
 
-export const EMPLOYEES_ROUTES = {
-  EMPLOYEES: "/employees",
+export const COMPANY_ROUTES = {
+  MAIN: "/company",
+  LOCATIONS: "/company/locations",
+  EMPLOYEES: "/company/employees",
+  TIMESHEETS: "/company/timesheets",
 };
 
-export const LOCATIONS_ROUTES = {
-  LOCATIONS: "/locations",
+export type NavItem = {
+  title: string;
+  href: string;
 };
+
+export type NavGroup = {
+  title: string;
+  items: NavItem[];
+};
+
+export const navigation: NavGroup[] = [
+  {
+    title: "Outsourced",
+    items: [
+      { title: "Dashboard", href: OUTSOURCED_ROUTES.DASHBOARD },
+      { title: "Employees", href: OUTSOURCED_ROUTES.EMPLOYEES },
+      { title: "Wallet", href: OUTSOURCED_ROUTES.WALLET },
+      { title: "Payroll", href: OUTSOURCED_ROUTES.PAYROLL },
+    ],
+  },
+  {
+    title: "Company",
+    items: [
+      {
+        title: "Employees",
+        href: COMPANY_ROUTES.EMPLOYEES,
+      },
+      { title: "Timesheets", href: COMPANY_ROUTES.TIMESHEETS },
+      { title: "Locations", href: COMPANY_ROUTES.LOCATIONS },
+    ],
+  },
+];
