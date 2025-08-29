@@ -2,7 +2,7 @@
 
 import FullLayout from "@/components/layout/full-layout";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useCompany, useCompanyLocations } from "@/lib/api-hooks";
+import { useCompanyLocations } from "@/lib/api-hooks";
 import { useState } from "react";
 import CompanyLocationsTable from "./table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,10 +10,11 @@ import { Button } from "@/components/ui/button";
 import CompanyLocationForm from "@/components/forms/company-location-form";
 import { CompanyLocation } from "@/lib/types";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { useAuth } from "@/lib/auth-context";
 
 export default function CompanyLocations() {
-  const { getCompany } = useCompany();
-  const { data: companyData, isPending: isCompanyPending } = getCompany;
+  const { user: userData } = useAuth();
+  const companyData = userData?.company;
   const { getCompanyLocations } = useCompanyLocations(companyData?.id || "");
   const [showForm, setShowForm] = useState(false);
 
@@ -38,7 +39,7 @@ export default function CompanyLocations() {
     setSelectedLocation(null);
   };
 
-  if (isCompanyPending || isLocationsPending) {
+  if (isLocationsPending) {
     return (
       <FullLayout
         title="Company Locations"
@@ -65,7 +66,7 @@ export default function CompanyLocations() {
       </Dialog>
 
       <Card>
-        <CardHeader className=" flex-row items-center justify-between">
+        <CardHeader className="flex-row items-center justify-between">
           <CardTitle>Locations</CardTitle>
           <Button onClick={handleAddLocation}>Add Location</Button>
         </CardHeader>

@@ -1,3 +1,5 @@
+import { ROLES } from "./constants";
+
 export interface OutsourcedDashboard {
   totalEmployees: number;
   activeEmployees: number;
@@ -223,4 +225,103 @@ export interface UpdateCompanyLocation {
   id: string;
   name: string;
   description?: string;
+}
+
+export interface UserProfile {
+  id: string;
+  email: string;
+  phoneNumber: string | null;
+  roles: string[];
+  companyId: string;
+  isActive: boolean;
+  isEmailVerified: boolean;
+  company: Company | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateEmployee {
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  workEmail: string;
+  phoneNumber?: string;
+  nationalId?: string;
+  kraPin?: string;
+  shif?: string;
+  nssf?: string;
+  internalEmployeeId?: string;
+  locationId?: string;
+  roles: RoleKey[];
+}
+
+export interface UpdateEmployee {
+  id: string;
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  workEmail: string;
+  phoneNumber?: string;
+  nationalId?: string;
+  kraPin?: string;
+  shif?: string;
+  nssf?: string;
+  internalEmployeeId?: string;
+}
+
+export interface UpdateEmployeeRole {
+  id: string;
+  role: RoleKey;
+  locationId: null | string;
+}
+
+export interface Employee {
+  id: string;
+  firstName: string;
+  middleName: string | null;
+  lastName: string;
+  workEmail: string;
+  phoneNumber: string | null;
+  nationalId: string | null;
+  kraPin: string | null;
+  shif: string | null;
+  nssf: string | null;
+  internalEmployeeId: string;
+  locationId: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  userId: string;
+  createdBy: string | null;
+  companyId: string;
+  location: CompanyLocation | null;
+  userProfile: UserProfile;
+}
+
+export type RoleKey = keyof typeof ROLES;
+
+export interface Me {
+  id: string;
+  email: string;
+  username: string;
+  company: {
+    id: string;
+    name: string;
+    alias: string;
+    country_of_incorporation: string;
+    date_of_incorporation: string;
+    employee_count: number;
+  };
+  company_id: string;
+  user: {
+    id: string;
+    email: string;
+    username: string;
+    roles: RoleKey[];
+    is_active: boolean;
+    is_verified: boolean;
+    phone_number: string;
+    has_2fa: boolean;
+  };
 }

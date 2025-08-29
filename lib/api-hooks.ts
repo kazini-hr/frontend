@@ -36,6 +36,10 @@ import type {
   CompanyLocation,
   UpdateCompanyLocation,
   CreateCompanyLocation,
+  Employee,
+  CreateEmployee,
+  UpdateEmployee,
+  UpdateEmployeeRole,
 } from "./types";
 
 // Environment flag to toggle between mock and real API
@@ -1016,6 +1020,79 @@ export function useCompanyLocations(companyId: string) {
     getCompanyLocations,
     addCompanyLocation,
     updateCompanyLocation,
+  };
+}
+
+export function useEmployees(companyId: string) {
+  const queryClient = useQueryClient();
+
+  const getEmployees = useQuery<Employee[]>({
+    queryKey: ["company", companyId, "employees"],
+    queryFn: () =>
+      api
+        .get("/api/companies/" + companyId + "/employees")
+        .then((res) => res.data.data),
+  });
+
+  const addEmployee = useMutation({
+    mutationFn: async (employee: CreateEmployee) => {
+      const res = await api.post(
+        "/api/companies/" + companyId + "/employees",
+        employee
+      );
+      return res.data.data as Employee;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["company", companyId, "employees"],
+      });
+    },
+    onError: (error) => {
+      console.error("Error adding employee:", error);
+    },
+  });
+
+  const updateEmployee = useMutation({
+    mutationFn: async (employee: UpdateEmployee) => {
+      const res = await api.put(
+        "/api/companies/" + companyId + "/employees/" + employee.id,
+        employee
+      );
+      return res.data.data as Employee;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["company", companyId, "employees"],
+      });
+    },
+    onError: (error) => {
+      console.error("Error updating employee:", error);
+    },
+  });
+
+  const updateEmployeeRoles = useMutation({
+    mutationFn: async (employee: UpdateEmployeeRole) => {
+      const res = await api.put(
+        "/api/companies/" + companyId + "/employees/" + employee.id + "/role",
+        employee
+      );
+      return res.data.data as Employee;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["company", companyId, "employees"],
+      });
+    },
+    onError: (error) => {
+      console.error("Error updating employee roles:", error);
+    },
+  });
+
+  return {
+    getEmployees,
+    addEmployee,
+    updateEmployee,
+    updateEmployeeRoles,
   };
 }
 
