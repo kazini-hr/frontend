@@ -325,3 +325,40 @@ export interface Me {
     has_2fa: boolean;
   };
 }
+
+export interface Timesheet {
+  id: string;
+  employee: Pick<
+    Employee,
+    | "id"
+    | "internalEmployeeId"
+    | "firstName"
+    | "middleName"
+    | "lastName"
+    | "workEmail"
+  >;
+  companyLocation: CompanyLocation;
+  timeIn: string;
+  timeOut: string | null;
+  timeInApprovedBy: Pick<
+    Employee,
+    | "id"
+    | "internalEmployeeId"
+    | "firstName"
+    | "middleName"
+    | "lastName"
+    | "workEmail"
+  >;
+  timeOutApprovedBy: Pick<
+    Employee,
+    | "id"
+    | "internalEmployeeId"
+    | "firstName"
+    | "middleName"
+    | "lastName"
+    | "workEmail"
+  > | null;
+  createdAt: string;
+  updatedAt: string;
+  companyId: string;
+}

@@ -911,7 +911,7 @@ export const useDisbursePayroll = () => {
   });
 };
 
-export function useTimesheetOperations() {
+export function useTimesheets(companyId: string) {
   const queryClient = useQueryClient();
 
   // const createTimesheet = useMutation(createTimesheetApi, {
@@ -930,7 +930,12 @@ export function useTimesheetOperations() {
     useQuery({
       queryKey: ["timesheets", searchParams],
       queryFn: () =>
-        api.post("/api/timesheet/search", searchParams).then((res) => res.data),
+        api
+          .post(
+            "/api/companies/" + companyId + "/timesheets/search",
+            searchParams
+          )
+          .then((res) => res.data),
       enabled: false,
     });
 
