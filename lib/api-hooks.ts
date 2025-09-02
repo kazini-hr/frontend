@@ -40,6 +40,8 @@ import type {
   CreateEmployee,
   UpdateEmployee,
   UpdateEmployeeRole,
+  TimesheetCreate,
+  TimesheetUpdate,
 } from "./types";
 
 // Environment flag to toggle between mock and real API
@@ -914,17 +916,33 @@ export const useDisbursePayroll = () => {
 export function useTimesheets(companyId: string) {
   const queryClient = useQueryClient();
 
-  // const createTimesheet = useMutation(createTimesheetApi, {
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries(["timesheets"]);
-  //   },
-  // });
+  const updateTimesheet = useMutation({
+    mutationFn: async (timesheet: TimesheetUpdate[]) => {
+      await api.patch("/api/companies/" + companyId + "/timesheets", timesheet);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["timesheets"],
+      });
+    },
+    onError: (error) => {
+      console.error("Error updating timesheet:", error);
+    },
+  });
 
-  // const updateTimesheet = useMutation(updateTimesheetApi, {
-  //   onSuccess: (data, variables) => {
-  //     queryClient.setQueryData(["timesheets", variables.id], data);
-  //   },
-  // });
+  const addTimesheet = useMutation({
+    mutationFn: async (timesheet: TimesheetCreate[]) => {
+      await api.post("/api/companies/" + companyId + "/timesheets", timesheet);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["timesheets"],
+      });
+    },
+    onError: (error) => {
+      console.error("Error adding timesheet:", error);
+    },
+  });
 
   const getTimesheets = (searchParams: any) =>
     useQuery({
@@ -940,9 +958,9 @@ export function useTimesheets(companyId: string) {
     });
 
   return {
-    // createTimesheet,
-    // updateTimesheet,
     getTimesheets,
+    addTimesheet,
+    updateTimesheet,
   };
 }
 

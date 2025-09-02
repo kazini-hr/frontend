@@ -362,3 +362,14 @@ export interface Timesheet {
   updatedAt: string;
   companyId: string;
 }
+
+export interface TimesheetCreate {
+  employeeId: string;
+  companyLocationId: string;
+  timeIn: string;
+}
+
+export interface TimesheetUpdate {
+  id: string;
+  timeOut: string;
+}

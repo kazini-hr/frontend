@@ -36,6 +36,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import TimesheetsFilters from "./filters";
+import TimesheetCreateForm from "@/components/forms/timesheet-create-form";
 
 interface DateFilter {
   startDate: string;
@@ -66,7 +67,6 @@ export default function Timesheets() {
     getCompanyLocations;
 
   const { getTimesheets } = useTimesheets(company?.id || "");
-  const today = new Date().toISOString().split("T")[0];
   const [filters, setFilters] = useState<DateFilter>({
     startDate: "",
     endDate: "",
@@ -131,6 +131,33 @@ export default function Timesheets() {
             employees={companyEmployees || []}
             setFilters={updateFilters}
           />
+          <Dialog open={showForm} onOpenChange={setShowForm}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Timesheet</DialogTitle>
+              </DialogHeader>
+
+              <TimesheetCreateForm
+                closeForm={() => setShowForm(false)}
+                locations={companyLocations || []}
+                employees={companyEmployees || []}
+              />
+            </DialogContent>
+          </Dialog>
+          <Dialog open={showForm} onOpenChange={setShowForm}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Timesheet</DialogTitle>
+              </DialogHeader>
+
+              <TimesheetCreateForm
+                closeForm={() => setShowForm(false)}
+                locations={companyLocations || []}
+                employees={companyEmployees || []}
+              />
+            </DialogContent>
+          </Dialog>
+
           {isLoading ? (
             <Skeleton className="h-40 w-full" />
           ) : !timesheetsData?.items.length ? (
@@ -146,7 +173,6 @@ export default function Timesheets() {
                   <TableHead>Location</TableHead>
                   <TableHead>Time In</TableHead>
                   <TableHead>Time Out</TableHead>
-
                   <TableHead></TableHead>
                 </TableRow>
               </TableHeader>

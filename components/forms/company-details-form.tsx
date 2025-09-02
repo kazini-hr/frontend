@@ -61,7 +61,7 @@ export default function CompanyDetailsForm({
   const { updateCompany } = useCompany();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm<CompanyFormValues>({
+  const formMethods = useForm<CompanyFormValues>({
     resolver: zodResolver(companySchema),
     defaultValues: {
       name: data?.name ?? "",
@@ -79,7 +79,7 @@ export default function CompanyDetailsForm({
     handleSubmit,
     control,
     formState: { errors },
-  } = form;
+  } = formMethods;
 
   const onSubmit = async (values: CompanyFormValues) => {
     try {
