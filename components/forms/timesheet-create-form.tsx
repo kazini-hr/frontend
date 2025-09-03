@@ -66,8 +66,10 @@ export default function TimesheetCreateForm({
   closeForm,
   locations,
   employees,
+  refetch,
 }: {
   closeForm: () => void;
+  refetch: () => void;
   locations: CompanyLocation[];
   employees: Employee[];
 }) {
@@ -109,6 +111,7 @@ export default function TimesheetCreateForm({
       }));
       await addTimesheet.mutateAsync(data);
       toast.success("Timesheet created successfully");
+      refetch();
       closeForm();
     } catch (error) {
       toast.error("Error creating timesheet");

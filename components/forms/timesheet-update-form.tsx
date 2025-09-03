@@ -37,7 +37,8 @@ import { ChevronDownIcon } from "lucide-react";
 
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
-import { addDays, subDays } from "date-fns";
+import { addDays, subDays, format } from "date-fns";
+import { dateFormatter } from "@/lib/utils";
 
 const timesheetFormSchema = z.object({
   companyLocationId: z.string().min(1, { message: "Location is required" }),
@@ -48,10 +49,8 @@ const timesheetFormSchema = z.object({
     (value) => {
       const selected = new Date(value);
       const now = new Date();
-
       const min = subDays(now, 2);
       const max = addDays(now, 2);
-
       return selected >= min && selected <= max;
     },
     {
@@ -62,27 +61,30 @@ const timesheetFormSchema = z.object({
 
 type TimesheetFormValues = z.infer<typeof timesheetFormSchema>;
 
-export default function TimesheetCreateForm({
+export default function TimesheetUpdateForm({
   closeForm,
   locations,
-  employees,
+  refetch,
 }: {
   closeForm: () => void;
   locations: CompanyLocation[];
   employees: Employee[];
+  refetch: () => void;
 }) {
   const { user: userData } = useAuth();
   const company = userData?.company;
   const [openDate, setOpenDate] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { updateTimesheet } = useTimesheets(company?.id ?? "");
+  const { updateTimesheet, getActiveTimesheets } = useTimesheets(
+    company?.id ?? ""
+  );
 
   const formMethods = useForm<TimesheetFormValues>({
     resolver: zodResolver(timesheetFormSchema),
     defaultValues: {
       companyLocationId: "",
       timeSheetIds: [],
-      timeOut: "",
+      timeOut: new Date().toISOString(),
     },
   });
 
@@ -94,20 +96,35 @@ export default function TimesheetCreateForm({
     setValue,
     watch,
   } = formMethods;
+  const companyLocationId = watch("companyLocationId");
+
+  const {
+    data: timesheetsData,
+    refetch: refetchTimesheets,
+    isFetching: isTimesheetsFetching,
+    fetchNextPage,
+    hasNextPage,
+  } = getActiveTimesheets(companyLocationId);
 
   useEffect(() => {
     setValue("timeSheetIds", []);
-  }, [watch("companyLocationId")]);
+    if (companyLocationId && company?.id) refetchTimesheets();
+  }, [companyLocationId, company?.id]);
+
+  useEffect(() => {
+    if (hasNextPage) fetchNextPage();
+  }, [hasNextPage, fetchNextPage]);
 
   const onSubmit = async (values: TimesheetFormValues) => {
     try {
       setIsSubmitting(true);
-      const data = values.timeSheetIds.map((timeSheetId) => ({
-        timeSheetId,
+      const data = values.timeSheetIds.map((timesheetId) => ({
+        timesheetId,
         timeOut: values.timeOut,
       }));
       await updateTimesheet.mutateAsync(data);
       toast.success("Timesheet updated successfully");
+      refetch();
       closeForm();
     } catch (error) {
       toast.error("Error updating timesheet");
@@ -116,6 +133,8 @@ export default function TimesheetCreateForm({
       setIsSubmitting(false);
     }
   };
+
+  const timesheets = timesheetsData?.pages.flatMap((page) => page.items) ?? [];
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -151,7 +170,7 @@ export default function TimesheetCreateForm({
         </div>
 
         <div>
-          {watch("companyLocationId") && (
+          {companyLocationId && !isTimesheetsFetching && (
             <Controller
               name="timeSheetIds"
               control={control}
@@ -162,7 +181,7 @@ export default function TimesheetCreateForm({
                 return (
                   <div className="flex flex-col gap-3">
                     <Label htmlFor="timeSheetIds" className="px-1">
-                      Timesheets
+                      Employees Currently Clocked In
                     </Label>
                     <Popover open={open} onOpenChange={setOpen}>
                       <PopoverTrigger asChild>
@@ -179,7 +198,7 @@ export default function TimesheetCreateForm({
                           <ChevronDown className="opacity-50" />
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="">
+                      <PopoverContent className="w-50">
                         <Command>
                           <CommandInput
                             placeholder="Search timesheet..."
@@ -187,58 +206,73 @@ export default function TimesheetCreateForm({
                           />
                           <CommandList>
                             <CommandEmpty>
-                              {getValues("companyLocationId")
+                              {companyLocationId
                                 ? "No timesheet found"
                                 : "Select location first"}
                             </CommandEmpty>
                             <CommandGroup>
-                              {employees
-                                .filter((employee) => {
-                                  return (
-                                    getValues("companyLocationId") ===
-                                    (employee.locationId ?? "")
-                                  );
-                                })
-                                .map((employee) => {
-                                  const name =
-                                    [
-                                      employee.firstName,
-                                      employee.middleName,
-                                      employee.lastName,
+                              {timesheets.map((timesheet) => {
+                                const name =
+                                  [
+                                    timesheet.employee.firstName,
+                                    timesheet.employee.middleName,
+                                    timesheet.employee.lastName,
+                                  ]
+                                    .filter(Boolean)
+                                    .join(" ") +
+                                  " - " +
+                                  timesheet.employee.internalEmployeeId +
+                                  `\n (Time in: ${dateFormatter.format(
+                                    new Date(timesheet.timeIn)
+                                  )})`;
+
+                                const nameHtml = (
+                                  <>
+                                    {[
+                                      timesheet.employee.firstName,
+                                      timesheet.employee.middleName,
+                                      timesheet.employee.lastName,
                                     ]
                                       .filter(Boolean)
                                       .join(" ") +
-                                    " - " +
-                                    employee.internalEmployeeId;
+                                      " - " +
+                                      timesheet.employee.internalEmployeeId}
+                                    <br />
+                                    (Time in:{" "}
+                                    {dateFormatter.format(
+                                      new Date(timesheet.timeIn)
+                                    )}
+                                    )
+                                  </>
+                                );
+                                return (
+                                  <CommandItem
+                                    key={timesheet.id}
+                                    value={name}
+                                    onSelect={() => {
+                                      const newValue = selectedIds.includes(
+                                        timesheet.id
+                                      )
+                                        ? selectedIds.filter(
+                                            (id) => id !== timesheet.id
+                                          )
+                                        : [...selectedIds, timesheet.id];
 
-                                  return (
-                                    <CommandItem
-                                      key={employee.id}
-                                      value={name}
-                                      onSelect={() => {
-                                        const newValue = selectedIds.includes(
-                                          employee.id
-                                        )
-                                          ? selectedIds.filter(
-                                              (id) => id !== employee.id
-                                            )
-                                          : [...selectedIds, employee.id];
-
-                                        field.onChange(newValue);
-                                      }}
-                                    >
-                                      {name}
-                                      <Check
-                                        className={cn(
-                                          "ml-auto",
-                                          selectedIds.includes(employee.id)
-                                            ? "opacity-100"
-                                            : "opacity-0"
-                                        )}
-                                      />
-                                    </CommandItem>
-                                  );
-                                })}
+                                      field.onChange(newValue);
+                                    }}
+                                  >
+                                    {nameHtml}
+                                    <Check
+                                      className={cn(
+                                        "ml-auto",
+                                        selectedIds.includes(timesheet.id)
+                                          ? "opacity-100"
+                                          : "opacity-0"
+                                      )}
+                                    />
+                                  </CommandItem>
+                                );
+                              })}
                             </CommandGroup>
                           </CommandList>
                         </Command>
@@ -271,7 +305,7 @@ export default function TimesheetCreateForm({
                     className="justify-between font-normal"
                   >
                     {getValues("timeOut")
-                      ? new Date(getValues("timeOut")).toLocaleDateString()
+                      ? format(new Date(getValues("timeOut")), "PPP")
                       : "Select date"}
                     <ChevronDownIcon />
                   </Button>
@@ -313,13 +347,10 @@ export default function TimesheetCreateForm({
                 id="time-picker"
                 step="1"
                 value={
-                  getValues("timeOut")
-                    ? new Date(getValues("timeOut")).toLocaleTimeString(
-                        "en-GB",
-                        {
-                          hour12: false,
-                        }
-                      )
+                  watch("timeOut")
+                    ? new Date(watch("timeOut")).toLocaleTimeString("en-GB", {
+                        hour12: false,
+                      })
                     : ""
                 }
                 onChange={(e) => {
@@ -364,9 +395,4 @@ export default function TimesheetCreateForm({
       </div>
     </form>
   );
-}
-
-export function Calendar24() {
-  const [open, setOpen] = useState(false);
-  const [date, setDate] = useState<Date | undefined>(undefined);
 }

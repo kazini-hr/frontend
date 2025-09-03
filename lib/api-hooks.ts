@@ -1,4 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  useInfiniteQuery,
+} from "@tanstack/react-query";
 import api from "./api";
 import {
   mockDashboard,
@@ -43,6 +48,7 @@ import type {
   TimesheetCreate,
   TimesheetUpdate,
 } from "./types";
+import { subDays } from "date-fns";
 
 // Environment flag to toggle between mock and real API
 const USE_MOCK_DATA = process.env.NEXT_PUBLIC_USE_MOCK === "true";
@@ -957,10 +963,40 @@ export function useTimesheets(companyId: string) {
       enabled: false,
     });
 
+  const getActiveTimesheets = (locationId: string) => {
+    const today = new Date();
+    const lastWeek = subDays(today, 7);
+
+    return useInfiniteQuery({
+      queryKey: ["timesheets", "active", locationId],
+      queryFn: async ({ pageParam = 1 }) => {
+        const res = await api.post(
+          `/api/companies/${companyId}/timesheets/search`,
+          {
+            pagination: { page: pageParam, limit: 100 },
+            filters: {
+              startDate: lastWeek.toISOString(),
+              endDate: today.toISOString(),
+              activeShift: true,
+              companyLocationIds: [locationId],
+            },
+          }
+        );
+        return res.data;
+      },
+      getNextPageParam: (lastPage) => {
+        return lastPage.has_next ? lastPage.page + 1 : undefined;
+      },
+      initialPageParam: 1,
+      enabled: false,
+    });
+  };
+
   return {
     getTimesheets,
     addTimesheet,
     updateTimesheet,
+    getActiveTimesheets,
   };
 }
 

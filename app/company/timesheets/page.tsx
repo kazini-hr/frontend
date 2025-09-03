@@ -7,8 +7,9 @@ import { useEmployees, useTimesheets } from "@/lib/api-hooks";
 import { useCallback, useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import { Employee, Timesheet } from "@/lib/types";
+import { Timesheet } from "@/lib/types";
 import { useAuth } from "@/lib/auth-context";
+import { dateFormatter } from "@/lib/utils";
 
 import {
   Dialog,
@@ -37,6 +38,8 @@ import {
 } from "@/components/ui/table";
 import TimesheetsFilters from "./filters";
 import TimesheetCreateForm from "@/components/forms/timesheet-create-form";
+import TimesheetUpdateForm from "@/components/forms/timesheet-update-form";
+import { TimesheetDetails } from "./details";
 
 interface DateFilter {
   startDate: string;
@@ -54,9 +57,8 @@ export default function Timesheets() {
   const [currentPage, setCurrentPage] = useState(1);
   const [showForm, setShowForm] = useState(false);
   const [showDetails, setShowDetails] = useState(false);
-  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
-    null
-  );
+  const [showUpdateForm, setShowUpdateForm] = useState(false);
+  const [timesheet, setTimesheet] = useState<Timesheet | null>(null);
 
   const { getEmployees } = useEmployees(company?.id ?? "");
   const { data: companyEmployees, isPending: isEmployeesPending } =
@@ -91,11 +93,6 @@ export default function Timesheets() {
     if (company?.id) refetchTimesheets();
   }, [company?.id, currentPage, filters]);
 
-  const dateFormatter = new Intl.DateTimeFormat("en-GB", {
-    dateStyle: "full",
-    timeStyle: "short",
-  });
-
   const handlePageChange = (value: number | string) => {
     const page = parseInt(value.toString());
     if (isNaN(page) || page < 1) return setCurrentPage(1);
@@ -104,10 +101,32 @@ export default function Timesheets() {
     setCurrentPage(page);
   };
 
-  const handleAddEmployee = () => {
-    setSelectedEmployee(null);
-    setShowForm(true);
+  const handleClockIn = () => {
+    setShowUpdateForm(false);
     setShowDetails(false);
+    setTimesheet(null);
+    setShowForm(true);
+  };
+
+  const handleClockOut = () => {
+    setShowDetails(false);
+    setShowForm(false);
+    setTimesheet(null);
+    setShowUpdateForm(true);
+  };
+
+  const handleShowDetails = (timesheet: Timesheet) => {
+    setShowForm(false);
+    setShowUpdateForm(false);
+    setShowDetails(true);
+    setTimesheet(timesheet);
+  };
+
+  const handleClose = () => {
+    setShowForm(false);
+    setShowUpdateForm(false);
+    setShowDetails(false);
+    setTimesheet(null);
   };
 
   const isLoading =
@@ -118,11 +137,57 @@ export default function Timesheets() {
       title="Timesheets"
       description="Manage your employee timesheets"
     >
+      <Dialog open={showForm} onOpenChange={handleClose}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Timesheet (Clock In)</DialogTitle>
+          </DialogHeader>
+
+          <TimesheetCreateForm
+            closeForm={handleClose}
+            locations={companyLocations || []}
+            employees={companyEmployees || []}
+            refetch={refetchTimesheets}
+          />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showUpdateForm} onOpenChange={handleClose}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Timesheet (Clock Out)</DialogTitle>
+          </DialogHeader>
+
+          <TimesheetUpdateForm
+            closeForm={handleClose}
+            locations={companyLocations || []}
+            employees={companyEmployees || []}
+            refetch={refetchTimesheets}
+          />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showDetails} onOpenChange={handleClose}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Timesheet</DialogTitle>
+          </DialogHeader>
+
+          <TimesheetDetails closeForm={handleClose} timesheet={timesheet} />
+        </DialogContent>
+      </Dialog>
+
       <Card>
         <CardHeader className="flex-row items-center justify-between">
           <CardTitle>Timesheets</CardTitle>
           {!user?.roles.includes("EMPLOYEE") && (
-            <Button onClick={handleAddEmployee}>New Entry</Button>
+            <div className="flex gap-4">
+              <Button onClick={handleClockIn}>Clock In Employees</Button>
+
+              <Button onClick={handleClockOut} variant="outline">
+                Clock Out Employees
+              </Button>
+            </div>
           )}
         </CardHeader>
         <CardContent>
@@ -131,32 +196,6 @@ export default function Timesheets() {
             employees={companyEmployees || []}
             setFilters={updateFilters}
           />
-          <Dialog open={showForm} onOpenChange={setShowForm}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Timesheet</DialogTitle>
-              </DialogHeader>
-
-              <TimesheetCreateForm
-                closeForm={() => setShowForm(false)}
-                locations={companyLocations || []}
-                employees={companyEmployees || []}
-              />
-            </DialogContent>
-          </Dialog>
-          <Dialog open={showForm} onOpenChange={setShowForm}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Timesheet</DialogTitle>
-              </DialogHeader>
-
-              <TimesheetCreateForm
-                closeForm={() => setShowForm(false)}
-                locations={companyLocations || []}
-                employees={companyEmployees || []}
-              />
-            </DialogContent>
-          </Dialog>
 
           {isLoading ? (
             <Skeleton className="h-40 w-full" />
@@ -197,7 +236,11 @@ export default function Timesheets() {
                         : "Active Shift"}
                     </TableCell>
                     <TableCell>
-                      <Button variant="secondary" size="sm">
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => handleShowDetails(timesheet)}
+                      >
                         View
                       </Button>
                     </TableCell>

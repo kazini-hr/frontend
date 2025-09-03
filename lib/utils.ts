@@ -24,3 +24,8 @@ export function sortByField<T>(array: T[], field: keyof T): T[] {
     return 0;
   });
 }
+
+export const dateFormatter = new Intl.DateTimeFormat("en-GB", {
+  dateStyle: "full",
+  timeStyle: "short",
+});

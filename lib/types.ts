@@ -370,6 +370,6 @@ export interface TimesheetCreate {
 }
 
 export interface TimesheetUpdate {
-  id: string;
+  timesheetId: string;
   timeOut: string;
 }
