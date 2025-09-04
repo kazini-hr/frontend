@@ -23,14 +23,11 @@ interface FullLayoutProps {
 
 function Breadcrumb() {
   const pathname = usePathname();
-
-  const navMap = navigation.flatMap((group) =>
-    group.items.map((item) => ({
-      ...item,
-      groupTitle: group.title,
-    }))
-  );
-
+  const allRoutes = [...navigation.payroll, ...navigation.company];
+  const navMap = allRoutes.flatMap((item) => ({
+    ...item,
+    groupTitle: item.groupTitle,
+  }));
   const current = navMap.find((item) => pathname.startsWith(item.href));
 
   if (!current) return null;
@@ -39,8 +36,11 @@ function Breadcrumb() {
     {
       title: current.groupTitle,
       href:
-        navigation.find((g) => g.title === current.groupTitle)?.items[0].href ||
-        "#",
+        allRoutes
+          .find((g) => g.href === current.href)
+          ?.href.split("/")
+          .slice(0, -1)
+          .join("/") || "#",
     },
     { title: current.title, href: current.href },
   ];
@@ -74,7 +74,7 @@ export default function FullLayout({
   return (
     <div className="min-h-screen bg-gray-50">
       <Toaster richColors />
-      <DesktopSidebar pathname={"dashboard"} />
+      <DesktopSidebar pathname={pathname} />
       <MobileNav
         isOpen={isMobileNavOpen}
         onClose={() => setIsMobileNavOpen(false)}

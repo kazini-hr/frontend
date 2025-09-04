@@ -1,12 +1,10 @@
 "use client";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { X, ChevronDown, ChevronRight } from "lucide-react";
+import { X } from "lucide-react";
 import { navigation } from "@/lib/routes";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
-import { useState } from "react";
+import { NavItem } from "./nav-item";
 
 const MobileNav = ({
   isOpen,
@@ -17,12 +15,6 @@ const MobileNav = ({
   onClose: () => void;
   pathname: string;
 }) => {
-  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
-
-  const toggleGroup = (title: string) => {
-    setOpenGroups((prev) => ({ ...prev, [title]: !prev[title] }));
-  };
-
   if (!isOpen) return null;
 
   return (
@@ -57,45 +49,15 @@ const MobileNav = ({
             <X className="h-4 w-4" />
           </Button>
         </div>
-        <nav className="p-4 space-y-2">
-          {navigation.map((group) => (
-            <div key={group.title}>
-              {/* Group header */}
-              <button
-                onClick={() => toggleGroup(group.title)}
-                className="flex w-full items-center justify-between px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100 rounded-lg transition"
-              >
-                {group.title}
-                {openGroups[group.title] ? (
-                  <ChevronDown className="h-4 w-4" />
-                ) : (
-                  <ChevronRight className="h-4 w-4" />
-                )}
-              </button>
+        <nav className="flex-1 px-4 mt-6 space-y-2">
+          <div className="text-md font-bold text-gray-900">Payroll</div>
+          {navigation.payroll.map((item) => (
+            <NavItem key={item.href} item={item} pathname={pathname} />
+          ))}
 
-              {openGroups[group.title] && (
-                <div className="ml-4 mt-1 space-y-1">
-                  {group.items.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={onClose}
-                      className={cn(
-                        "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
-                        "hover:bg-accent hover:text-accent-foreground",
-                        pathname === item.href
-                          ? "bg-accent text-accent-foreground"
-                          : "text-muted-foreground"
-                      )}
-                    >
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium truncate">{item.title}</div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+          <div className="text-md font-bold text-gray-900">Company</div>
+          {navigation.company.map((item) => (
+            <NavItem key={item.href} item={item} pathname={pathname} />
           ))}
         </nav>
       </div>
