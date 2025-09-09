@@ -65,12 +65,12 @@ export default function CompanyDetailsForm({
     resolver: zodResolver(companySchema),
     defaultValues: {
       name: data?.name ?? "",
-      company_pin: data?.company_pin ?? "",
-      country_of_incorporation: data?.country_of_incorporation ?? "",
-      date_of_incorporation: data?.date_of_incorporation
-        ? new Date(data.date_of_incorporation).toISOString().split("T")[0]
+      company_pin: data?.companyPin ?? "",
+      country_of_incorporation: data?.countryOfIncorporation ?? "",
+      date_of_incorporation: data?.dateOfIncorporation
+        ? new Date(data.dateOfIncorporation).toISOString().split("T")[0]
         : "",
-      company_email: data?.company_email ?? "",
+      company_email: data?.companyEmail ?? "",
     },
   });
 

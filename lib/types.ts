@@ -204,12 +204,19 @@ export interface Verify2FAResponse {
 export interface Company {
   id: string;
   name: string;
+  companyPin: string;
+  countryOfIncorporation: string;
+  dateOfIncorporation: string;
+  companyEmail: string;
+}
+export interface UpdateCompany {
+  id: string;
+  name: string;
   company_pin: string;
   country_of_incorporation: string;
   date_of_incorporation: string;
   company_email: string;
 }
-
 export interface CreateCompanyLocation {
   name: string;
   description?: string;

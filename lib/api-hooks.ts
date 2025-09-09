@@ -47,6 +47,7 @@ import type {
   UpdateEmployeeRole,
   TimesheetCreate,
   TimesheetUpdate,
+  UpdateCompany,
 } from "./types";
 import { subDays } from "date-fns";
 
@@ -1005,14 +1006,16 @@ export function useCompany() {
 
   const getCompany = useQuery<Company>({
     queryKey: ["company"],
-    queryFn: () => api.get("/api/companies").then((res) => res.data.data),
+    queryFn: () =>
+      api.get("/api/companies").then((res) => {
+        return res.data?.[0];
+      }),
   });
 
   const updateCompany = useMutation({
-    mutationFn: async (updatedCompany: Company) => {
+    mutationFn: async (updatedCompany: UpdateCompany) => {
       const { id, ...data } = updatedCompany;
-      const res = await api.put("/api/companies/" + id, data);
-      return res.data.data as Company;
+      await api.put("/api/companies/" + id, data);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["company"] });

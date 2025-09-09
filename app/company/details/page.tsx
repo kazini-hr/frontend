@@ -12,7 +12,7 @@ import {
 import { useCompany } from "@/lib/api-hooks";
 
 import { Building2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Company } from "@/lib/types";
@@ -29,10 +29,10 @@ const CompanyDetailsView = ({
 }) => {
   const {
     name,
-    company_pin,
-    country_of_incorporation,
-    date_of_incorporation,
-    company_email,
+    companyPin,
+    countryOfIncorporation,
+    dateOfIncorporation,
+    companyEmail,
   } = data;
 
   const fieldMapping = [
@@ -42,19 +42,19 @@ const CompanyDetailsView = ({
     },
     {
       label: "KRA PIN",
-      value: company_pin,
+      value: companyPin,
     },
     {
       label: "Country",
-      value: country_of_incorporation,
+      value: countryOfIncorporation,
     },
     {
       label: "Date of Incorporation",
-      value: format(new Date(date_of_incorporation), "dd-MM-yyyy"),
+      value: format(new Date(Date.parse(dateOfIncorporation)), "dd-MM-yyyy"),
     },
     {
       label: "Email",
-      value: company_email,
+      value: companyEmail,
     },
   ];
 
@@ -90,6 +90,7 @@ export default function CompanyDetails() {
   const { data, isPending, error } = getCompany;
   const [isEditing, setIsEditing] = useState(false);
 
+  console.log(data, "data");
   if (isPending) {
     return (
       <FullLayout

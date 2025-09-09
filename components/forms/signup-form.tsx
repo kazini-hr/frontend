@@ -119,7 +119,7 @@ export function SignupForm({
 
   const goToLogin = () => router.push("/login");
 
-  if (registrationSuccess || true) {
+  if (registrationSuccess) {
     return (
       <div className={cn("flex flex-col gap-6", className)} {...props}>
         <Toaster richColors />

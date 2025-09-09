@@ -6,12 +6,12 @@ export const COUNTRIES = {
 };
 
 export const ROLES = {
-  SUPER_ADMIN: "Super Admin",
+  // SUPER_ADMIN: "Super Admin",
   COMPANY_ADMIN: "Company Admin",
   MANAGER: "Manager",
   EMPLOYEE: "Employee",
-  APPROVER: "Approver",
-  GUEST: "Guest",
+  // APPROVER: "Approver",
+  // GUEST: "Guest",
 };
 
 function createRoleKeys<T extends Record<string, string>>(roles: T) {
