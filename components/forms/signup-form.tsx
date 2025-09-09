@@ -339,7 +339,6 @@ export function SignupForm({
                               type="number"
                               min="1"
                               placeholder="10"
-                              defaultValue={10}
                               {...field}
                             />
                           </FormControl>
