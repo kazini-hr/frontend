@@ -1,3 +1,5 @@
+import { ROLES } from "./constants";
+
 export interface OutsourcedDashboard {
   totalEmployees: number;
   activeEmployees: number;
@@ -54,7 +56,6 @@ export interface Wallet {
   narrative: string;
   createdAt: string;
   updatedAt: string;
-
 }
 
 export interface WalletBalance {
@@ -71,7 +72,7 @@ export interface WalletBalance {
 
 export interface WalletTransaction {
   id: string;
-  transactionType: 'CREDIT' | 'DEBIT';
+  transactionType: "CREDIT" | "DEBIT";
   amount: number;
   reference: string;
   paymentStatus: string;
@@ -135,15 +136,17 @@ export interface OutsourcedWalletFundResponse {
 
 export interface RegisterCompanyRequest {
   company_name: string;
-  company_alias: string;
+  company_email: string;
   country_of_incorporation: string;
   company_pin: string;
   date_of_incorporation: string;
-  company_email: string;
   employee_count: number;
+
   admin_email: string;
-  admin_username: string;
-  admin_phone: string;
+  admin_first_name: string;
+  admin_last_name: string;
+  admin_middle_name?: string;
+  admin_phone?: string;
 }
 
 export interface RegisterCompanyResponse {
@@ -152,7 +155,7 @@ export interface RegisterCompanyResponse {
   admin_email: string;
   company: {
     uniqueId: string;
-  }
+  };
 }
 
 export interface LoginRequest {
@@ -196,4 +199,184 @@ export interface Verify2FARequest {
 export interface Verify2FAResponse {
   message: string;
   setup_complete: boolean;
+}
+
+export interface Company {
+  id: string;
+  name: string;
+  companyPin: string;
+  countryOfIncorporation: string;
+  dateOfIncorporation: string;
+  companyEmail: string;
+}
+export interface UpdateCompany {
+  id: string;
+  name: string;
+  company_pin: string;
+  country_of_incorporation: string;
+  date_of_incorporation: string;
+  company_email: string;
+}
+export interface CreateCompanyLocation {
+  name: string;
+  description?: string;
+}
+export interface CompanyLocation {
+  id: string;
+  name: string;
+  description: string;
+  companyId: string;
+}
+
+export interface UpdateCompanyLocation {
+  id: string;
+  name: string;
+  description?: string;
+}
+
+export interface UserProfile {
+  id: string;
+  email: string;
+  phoneNumber: string | null;
+  roles: string[];
+  companyId: string;
+  isActive: boolean;
+  isEmailVerified: boolean;
+  company: Company | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateEmployee {
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  workEmail: string;
+  phoneNumber?: string;
+  nationalId?: string;
+  kraPin?: string;
+  shif?: string;
+  nssf?: string;
+  internalEmployeeId?: string;
+  locationId?: string;
+  roles: RoleKey[];
+}
+
+export interface UpdateEmployee {
+  id: string;
+  firstName: string;
+  middleName?: string;
+  lastName: string;
+  workEmail: string;
+  phoneNumber?: string;
+  nationalId?: string;
+  kraPin?: string;
+  shif?: string;
+  nssf?: string;
+  internalEmployeeId?: string;
+}
+
+export interface UpdateEmployeeRole {
+  id: string;
+  role: RoleKey;
+  locationId: null | string;
+}
+
+export interface Employee {
+  id: string;
+  firstName: string;
+  middleName: string | null;
+  lastName: string;
+  workEmail: string;
+  phoneNumber: string | null;
+  nationalId: string | null;
+  kraPin: string | null;
+  shif: string | null;
+  nssf: string | null;
+  internalEmployeeId: string;
+  locationId: string | null;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  userId: string;
+  createdBy: string | null;
+  companyId: string;
+  location: CompanyLocation | null;
+  userProfile: UserProfile;
+}
+
+export type RoleKey = keyof typeof ROLES;
+
+export interface Me {
+  id: string;
+  email: string;
+  username: string;
+  company: {
+    id: string;
+    name: string;
+    alias: string;
+    country_of_incorporation: string;
+    date_of_incorporation: string;
+    employee_count: number;
+  };
+  company_id: string;
+  user: {
+    id: string;
+    email: string;
+    username: string;
+    roles: RoleKey[];
+    is_active: boolean;
+    is_verified: boolean;
+    phone_number: string;
+    has_2fa: boolean;
+  };
+}
+
+export interface Timesheet {
+  id: string;
+  employee: Pick<
+    Employee,
+    | "id"
+    | "internalEmployeeId"
+    | "firstName"
+    | "middleName"
+    | "lastName"
+    | "workEmail"
+  >;
+  companyLocation: CompanyLocation;
+  timeIn: string;
+  timeOut: string | null;
+  timeInApprovedBy: Pick<
+    Employee,
+    | "id"
+    | "internalEmployeeId"
+    | "firstName"
+    | "middleName"
+    | "lastName"
+    | "workEmail"
+  >;
+  timeOutApprovedBy: Pick<
+    Employee,
+    | "id"
+    | "internalEmployeeId"
+    | "firstName"
+    | "middleName"
+    | "lastName"
+    | "workEmail"
+  > | null;
+  createdAt: string;
+  updatedAt: string;
+  companyId: string;
+}
+
+export interface TimesheetCreate {
+  employeeId: string;
+  companyLocationId: string;
+  timeIn: string;
+}
+
+export interface TimesheetUpdate {
+  timesheetId: string;
+  timeOut: string;
 }
