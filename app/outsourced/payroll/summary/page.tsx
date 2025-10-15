@@ -41,6 +41,8 @@ import {
   CreditCard,
 } from "lucide-react";
 
+const BUFFER_AMOUNT = 50; // Buffer for transaction fees
+
 // Process Payroll Confirmation Modal
 const ProcessPayrollModal = ({
   isOpen,
@@ -88,22 +90,22 @@ const ProcessPayrollModal = ({
                     KES {summary.totalNetPay.toLocaleString()}
                   </span>
                 </div>
-                {/* <div className="flex justify-between">
-                  <span className="font-medium">KaziniHR Fees (2%):</span>
-                  <span className="text-blue-600">
-                    KES {summary.totalKaziniHRFees.toLocaleString()}
-                  </span>
-                </div> */}
                 <div className="flex justify-between">
                   <span className="font-medium">Transaction Fees:</span>
                   <span className="text-blue-600">
-                    KES {summary.totalTransactionFees.toLocaleString()}
+                    KES{" "}
+                    {(
+                      summary.totalTransactionFees + BUFFER_AMOUNT
+                    ).toLocaleString()}
                   </span>
                 </div>
                 <div className="border-t pt-2 flex justify-between font-bold">
                   <span>Total Amount:</span>
                   <span>
-                    KES {summary.totalDisbursementAmount.toLocaleString()}
+                    KES{" "}
+                    {(
+                      summary.totalDisbursementAmount + BUFFER_AMOUNT
+                    ).toLocaleString()}
                   </span>
                 </div>
               </div>
@@ -291,14 +293,18 @@ export default function PayrollSummaryPage() {
 
         <Card className="border-purple-200 bg-purple-50/50">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">KaziniHR Fees</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Transaction Fees
+            </CardTitle>
             <Calculator className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-xl font-bold text-purple-700">
-              {formatCurrency(summary.totalKaziniHRFees)}
+              {formatCurrency(summary.totalTransactionFees + BUFFER_AMOUNT)}
             </div>
-            <p className="text-xs text-muted-foreground mt-1">2% of net pay</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              KES 150 per transaction
+            </p>
           </CardContent>
         </Card>
 
@@ -309,7 +315,7 @@ export default function PayrollSummaryPage() {
           </CardHeader>
           <CardContent>
             <div className="text-xl font-bold text-slate-700">
-              {formatCurrency(summary.totalDisbursementAmount)}
+              {formatCurrency(summary.totalDisbursementAmount + BUFFER_AMOUNT)}
             </div>
           </CardContent>
         </Card>
@@ -371,7 +377,9 @@ export default function PayrollSummaryPage() {
                     <TableHead className="text-right">Gross Pay</TableHead>
                     <TableHead className="text-right">PAYE Tax</TableHead>
                     <TableHead className="text-right">Net Pay</TableHead>
-                    <TableHead className="text-right">KaziniHR Fee</TableHead>
+                    <TableHead className="text-right">
+                      Transaction Fees
+                    </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -395,7 +403,9 @@ export default function PayrollSummaryPage() {
                         {formatCurrency(employee.netPay)}
                       </TableCell>
                       <TableCell className="text-right text-purple-600 font-medium">
-                        {formatCurrency(employee.kazinihrFee)}
+                        {formatCurrency(
+                          employee.transactionFee + BUFFER_AMOUNT
+                        )}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -422,7 +432,9 @@ export default function PayrollSummaryPage() {
           <CheckCircle className="h-4 w-4" />
           <AlertDescription>
             Payroll summary is ready. Total disbursement amount:{" "}
-            <strong>{formatCurrency(summary.totalDisbursementAmount)}</strong>
+            <strong>
+              {formatCurrency(summary.totalDisbursementAmount + BUFFER_AMOUNT)}
+            </strong>
           </AlertDescription>
         </Alert>
       )}

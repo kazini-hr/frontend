@@ -675,6 +675,7 @@ export const usePayrollSummary = () => {
             totalNetPay: 0,
             totalPayeTax: 0,
             totalKaziniHRFees: 0,
+            totalTransactionFees: 0,
             totalDisbursementAmount: 0,
             breakdown: [],
             kazinihrAccount: mockPayrollSummary.kazinihrAccount
@@ -686,6 +687,7 @@ export const usePayrollSummary = () => {
           const payeTax = Math.round(grossPay * 0.2); // 20% PAYE
           const netPay = grossPay - payeTax;
           const kazinihrFee = Math.round(netPay * 0.02); // 2% fee
+          const transactionFee = 150; // Assuming transaction fee is same as KaziniHR fee
           
           return {
             employeeId: emp.id,
@@ -694,7 +696,8 @@ export const usePayrollSummary = () => {
             grossPay,
             payeTax,
             netPay,
-            kazinihrFee
+            kazinihrFee,
+            transactionFee,
           };
         });
         
@@ -710,7 +713,8 @@ export const usePayrollSummary = () => {
           ...totals,
           totalDisbursementAmount: totals.totalNetPay + totals.totalKaziniHRFees,
           breakdown,
-          kazinihrAccount: mockPayrollSummary.kazinihrAccount
+          kazinihrAccount: mockPayrollSummary.kazinihrAccount,
+          totalTransactionFees: 0
         };
         
         return mockApiResponse(summary);

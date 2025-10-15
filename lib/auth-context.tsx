@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import api from "@/lib/api";
 
-interface User {
+export interface User {
   id: string;
   email: string;
   username: string;

@@ -91,6 +91,7 @@ export interface PayrollOutsourcedSummary {
   totalNetPay: number;
   totalPayeTax: number;
   totalKaziniHRFees: number;
+  totalTransactionFees: number;
   totalDisbursementAmount: number;
   breakdown: Array<{
     employeeId: string;
@@ -100,6 +101,7 @@ export interface PayrollOutsourcedSummary {
     payeTax: number;
     netPay: number;
     kazinihrFee: number;
+    transactionFee: number;
   }>;
   kazinihrAccount: {
     bankName: string;

@@ -156,6 +156,7 @@ export const mockPayrollSummary: PayrollOutsourcedSummary = {
   totalPayeTax: 75000, // 20% of gross pay
   totalKaziniHRFees: 6000, // 2% of net pay
   totalDisbursementAmount: 306000, // net pay + fees
+  totalTransactionFees: 150, // Flat fee for each employee
   breakdown: [
     {
       employeeId: 'emp_001',
@@ -164,7 +165,8 @@ export const mockPayrollSummary: PayrollOutsourcedSummary = {
       grossPay: 85000,
       payeTax: 17000,
       netPay: 68000,
-      kazinihrFee: 1360
+      kazinihrFee: 1360,
+      transactionFee: 150
     },
     {
       employeeId: 'emp_002',
@@ -173,7 +175,8 @@ export const mockPayrollSummary: PayrollOutsourcedSummary = {
       grossPay: 120000,
       payeTax: 24000,
       netPay: 96000,
-      kazinihrFee: 1920
+      kazinihrFee: 1920,
+      transactionFee: 150
     },
     {
       employeeId: 'emp_003',
@@ -182,7 +185,8 @@ export const mockPayrollSummary: PayrollOutsourcedSummary = {
       grossPay: 95000,
       payeTax: 19000,
       netPay: 76000,
-      kazinihrFee: 1520
+      kazinihrFee: 1520,
+      transactionFee: 150
     },
     {
       employeeId: 'emp_004',
@@ -191,7 +195,8 @@ export const mockPayrollSummary: PayrollOutsourcedSummary = {
       grossPay: 75000,
       payeTax: 15000,
       netPay: 60000,
-      kazinihrFee: 1200
+      kazinihrFee: 1200,
+      transactionFee: 150
     }
   ],
   kazinihrAccount: {
@@ -199,7 +204,7 @@ export const mockPayrollSummary: PayrollOutsourcedSummary = {
     accountNumber: '9876543210',
     accountName: 'KaziniHR Limited',
     bankCode: '01'
-  }
+  },
 };
 
 // Mock Fund Wallet Response
