@@ -1,6 +1,6 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { externalLinks } from '../lib/utils/external-links';
+import Image from "next/image";
+import Link from "next/link";
+import { externalLinks } from "../lib/utils/external-links";
 
 export default function Footer() {
   return (
@@ -14,7 +14,7 @@ export default function Footer() {
               className="flex gap-2 justify-center items-center md:justify-start"
             >
               <Image
-                src="/images/kazini-hr-original-colors-removebg-preview.png"
+                src="/images/kazini-hr-original-colors-transparent.png"
                 alt="logo"
                 width={100}
                 height={100}
