@@ -6,5 +6,27 @@
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
+  },
+  "env": {
+    "production": {
+      "env": "production",
+      "node_env": "production",
+      "routes": [
+        {
+          "pattern": "app.kazinihr.co.ke/*",
+          "custom_domain": true
+        }
+      ]
+    },
+    "staging": {
+      "env": "staging",
+      "node_env": "staging",
+      "routes": [
+        {
+          "pattern": "staging.kazinihr.co.ke/*",
+          "custom_domain": true
+        }
+      ]
+    }
   }
 }
