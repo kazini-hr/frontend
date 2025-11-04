@@ -1,5 +1,5 @@
 {
-  "name": "kazini-staging",
+  "name": "staging-kazini",
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-01-01",
   "compatibility_flags": ["nodejs_compat"],
