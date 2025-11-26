@@ -1007,7 +1007,7 @@ export function useCompany() {
   const getCompany = useQuery<Company>({
     queryKey: ["company"],
     queryFn: () =>
-      api.get("/api/companies").then((res) => {
+      api.get("/api/companies/").then((res) => {
         return res.data?.[0];
       }),
   });
