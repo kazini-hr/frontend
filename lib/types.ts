@@ -147,6 +147,8 @@ export interface RegisterCompanyRequest {
   admin_last_name: string;
   admin_middle_name?: string;
   admin_phone?: string;
+  admin_username: string;
+  company_alias: string;
 }
 
 export interface RegisterCompanyResponse {

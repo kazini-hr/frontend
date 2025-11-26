@@ -106,6 +106,8 @@ export function SignupForm({
         date_of_incorporation: new Date(
           data.date_of_incorporation
         ).toISOString(),
+        admin_username: data.admin_email,
+        company_alias: data.company_name
       });
 
       setCompanyUniqueId(response?.company?.uniqueId);
