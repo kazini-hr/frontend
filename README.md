@@ -34,3 +34,7 @@ To dive deeper into Next.js, check out the following resources:
 ## 📄 License
 
 This project is [MIT](https://choosealicense.com/licenses/mit/) licensed.
+
+## Current Deploy Process
+
+https://developers.cloudflare.com/workers/framework-guides/web-apps/nextjs/

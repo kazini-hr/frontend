@@ -3,34 +3,10 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import api from "@/lib/api";
-
-interface User {
-  id: string;
-  email: string;
-  username: string;
-  company: {
-    id: string;
-    name: string;
-    alias: string;
-    country_of_incorporation: string;
-    date_of_incorporation: string;
-    employee_count: number;
-  };
-  company_id: string;
-  user: {
-    id: string;
-    email: string;
-    username: string;
-    roles: ("COMPANY_ADMIN" | "SUPER_ADMIN" | "EMPLOYEE")[]; // Add more role types if needed
-    is_active: boolean;
-    is_verified: boolean;
-    phone_number: string;
-    has_2fa: boolean;
-  };
-}
+import { Me } from "./types";
 
 interface AuthContextType {
-  user: User | null;
+  user: Me | null;
   isLoading: boolean;
   isAuthenticated: boolean;
   logout: () => Promise<void>;
@@ -40,7 +16,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<Me | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
