@@ -34,6 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error) {
       console.error("Auth check error:", error);
+      router.push("/login");
       setUser(null);
     } finally {
       setIsLoading(false);
@@ -47,7 +48,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       console.error("Logout error:", error);
     } finally {
       setUser(null);
-      localStorage.removeItem("auth_token");
       router.push("/login");
     }
   };
