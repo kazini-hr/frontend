@@ -5,21 +5,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  LayoutDashboard,
-  Users,
-  Wallet,
-  Settings,
-  Calculator,
-  FileText,
-  Menu,
-  X,
-  ChevronRight,
-  LogOut,
-  User,
-} from "lucide-react";
+import { Menu, X, ChevronRight, LogOut, User } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
 import {
@@ -31,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useLogout } from "@/lib/api-hooks";
+import { navigation } from "@/lib/routes";
 
 interface NavItem {
   title: string;
@@ -40,45 +28,7 @@ interface NavItem {
   badge?: string;
 }
 
-const navigation: NavItem[] = [
-  {
-    title: "Dashboard",
-    href: "/outsourced/dashboard",
-    icon: <LayoutDashboard className="h-4 w-4" />,
-    description: "Overview and metrics",
-  },
-  {
-    title: "Employees",
-    href: "/outsourced/employees",
-    icon: <Users className="h-4 w-4" />,
-    description: "Manage employee data",
-  },
-  {
-    title: "Wallet",
-    href: "/outsourced/wallet",
-    icon: <Wallet className="h-4 w-4" />,
-    description: "Fund and manage wallet",
-  },
-  {
-    title: "Payroll Config",
-    href: "/outsourced/payroll/config",
-    icon: <Settings className="h-4 w-4" />,
-    description: "Configure payroll settings",
-  },
-  {
-    title: "Payroll Summary",
-    href: "/outsourced/payroll/summary",
-    icon: <Calculator className="h-4 w-4" />,
-    description: "Review before processing",
-  },
-  {
-    title: "Reports",
-    href: "/outsourced/payroll/reports",
-    icon: <FileText className="h-4 w-4" />,
-    description: "View payroll history",
-  },
-];
-
+const allRoutes = [...navigation.payroll, ...navigation.company];
 // Breadcrumb Component
 const Breadcrumb = ({ pathname }: { pathname: string }) => {
   const pathSegments = pathname.split("/").filter(Boolean);
@@ -89,7 +39,7 @@ const Breadcrumb = ({ pathname }: { pathname: string }) => {
     if (pathSegments.includes("outsourced")) {
       items.push({ label: "Main", href: "/outsourced" });
 
-      const currentNav = navigation.find((nav) => nav.href === pathname);
+      const currentNav = allRoutes.find((nav) => nav.href === pathname);
       if (currentNav && currentNav.href !== "/outsourced/dashboard") {
         items.push({ label: currentNav.title, href: currentNav.href });
       }
@@ -156,13 +106,45 @@ const MobileNav = ({
         </div>
 
         <nav className="p-4 space-y-2">
-          {navigation.map((item) => (
+          <div className="text-md font-bold text-gray-900">Payroll</div>
+          {navigation.payroll.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               onClick={onClose}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
+                "flex items-center gap-3 rounded-lg px-3 py-1 text-sm transition-colors",
+                "hover:bg-accent hover:text-accent-foreground",
+                pathname === item.href
+                  ? "bg-accent text-accent-foreground"
+                  : "text-muted-foreground"
+              )}
+            >
+              {item.icon}
+              <div className="flex-1">
+                <div className="font-medium">{item.title}</div>
+                {item.description && (
+                  <div className="text-xs text-muted-foreground">
+                    {item.description}
+                  </div>
+                )}
+              </div>
+              {item.badge && (
+                <Badge variant="secondary" className="text-xs">
+                  {item.badge}
+                </Badge>
+              )}
+            </Link>
+          ))}
+
+          <div className="text-md font-bold text-gray-900 pt-4">Company</div>
+          {navigation.company.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={onClose}
+              className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-1 text-sm transition-colors",
                 "hover:bg-accent hover:text-accent-foreground",
                 pathname === item.href
                   ? "bg-accent text-accent-foreground"
@@ -208,18 +190,18 @@ const DesktopSidebar = ({ pathname }: { pathname: string }) => {
           </div>
           <div>
             <h1 className="text-lg font-bold text-gray-900">KaziniHR</h1>
-            <p className="text-xs text-gray-500">Outsourced Payroll</p>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 px-4 mt-6 space-y-1">
-          {navigation.map((item) => (
+        <nav className="flex-1 px-4 mt-4 space-y-1">
+          <div className="text-md font-bold text-gray-900">Payroll</div>
+          {navigation.payroll.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "group flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-all duration-200",
+                "group flex items-center gap-3 rounded-lg px-3 py-1 text-sm font-medium transition-all duration-200",
                 pathname === item.href
                   ? "bg-blue-50 text-blue-700 border border-blue-200"
                   : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
@@ -244,6 +226,36 @@ const DesktopSidebar = ({ pathname }: { pathname: string }) => {
                       pathname === item.href ? "text-blue-500" : "text-gray-500"
                     )}
                   >
+                    {item.description}
+                  </div>
+                )}
+              </div>
+              {item.badge && (
+                <Badge variant="secondary" className="text-xs">
+                  {item.badge}
+                </Badge>
+              )}
+            </Link>
+          ))}
+
+          <div className="text-md font-bold text-gray-900 pt-4">Company</div>
+          {navigation.company.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-1 text-sm transition-colors",
+                "hover:bg-accent hover:text-accent-foreground",
+                pathname === item.href
+                  ? "bg-accent text-accent-foreground"
+                  : "text-muted-foreground"
+              )}
+            >
+              {item.icon}
+              <div className="flex-1">
+                <div className="font-medium">{item.title}</div>
+                {item.description && (
+                  <div className="text-xs text-muted-foreground">
                     {item.description}
                   </div>
                 )}
@@ -356,7 +368,6 @@ export default function OutsourcedLayout({
                   width={100}
                   height={100}
                 />
-                <p className="text-xs text-gray-500">Outsourced Payroll</p>
               </div>
             </div>
             <ProfileDropdown />
